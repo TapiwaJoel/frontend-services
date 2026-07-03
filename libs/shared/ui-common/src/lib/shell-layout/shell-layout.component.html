@@ -1,0 +1,39 @@
+<div class="shell-layout" [attr.data-theme]="theme">
+  <header class="shell-layout__header">
+    <div class="shell-layout__header-content">
+      <div class="shell-layout__logo">
+        <a routerLink="/">
+          <h1>My App</h1>
+        </a>
+      </div>
+      <div class="shell-layout__header-actions">
+        <ng-content select="[slot=header-actions]"></ng-content>
+      </div>
+    </div>
+  </header>
+
+  <div class="shell-layout__notification-area">
+    <ng-content select="[slot=notifications]"></ng-content>
+  </div>
+
+  <div class="shell-layout__banner-area">
+    <ng-content select="[slot=banners]"></ng-content>
+  </div>
+
+  <main class="shell-layout__main">
+    <ng-content></ng-content>
+  </main>
+
+  <footer class="shell-layout__footer">
+    <div class="shell-layout__footer-content">
+      <div class="shell-layout__footer-copyright">
+        &copy; {{ currentYear }} My App. All rights reserved.
+      </div>
+      <div class="shell-layout__footer-links">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+</div>

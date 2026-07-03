@@ -1,0 +1,15 @@
+<app-shell-layout [user]="user$ | async" [theme]="(currentTheme$ | async) || 'default'">
+  <div slot="notifications">
+    <app-notification-container></app-notification-container>
+  </div>
+
+  <div slot="banners">
+    <app-banner-container></app-banner-container>
+  </div>
+
+  <div slot="header-actions">
+    <app-user-menu [user]="user$ | async"></app-user-menu>
+  </div>
+
+  <router-outlet></router-outlet>
+</app-shell-layout>

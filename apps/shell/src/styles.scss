@@ -1,0 +1,18 @@
+/* You can add global styles to this file, and also import other style files */
+
+// Import theme styles
+@use '../../../libs/shared/util-theming/src/lib/styles/themes.scss';
+
+// Basic body styling
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--theme-background-color);
+  color: var(--theme-text-color);
+  line-height: 1.5;
+}
+
+* {
+  box-sizing: border-box;
+}

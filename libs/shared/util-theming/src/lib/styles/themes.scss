@@ -1,0 +1,55 @@
+/**
+ * Theme CSS Custom Properties
+ * These variables are applied based on the data-theme attribute on the document element
+ */
+
+:root,
+[data-theme='default'] {
+  --theme-primary-color: #1976d2;
+  --theme-accent-color: #ff4081;
+  --theme-background-color: #ffffff;
+  --theme-text-color: #212121;
+  --theme-text-secondary: #757575;
+  --theme-border-color: #e0e0e0;
+  --theme-shadow: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='app1'] {
+  --theme-primary-color: #e91e63;
+  --theme-accent-color: #9c27b0;
+  --theme-background-color: #fafafa;
+  --theme-text-color: #212121;
+  --theme-text-secondary: #757575;
+  --theme-border-color: #e0e0e0;
+  --theme-shadow: rgba(233, 30, 99, 0.1);
+}
+
+[data-theme='app2'] {
+  --theme-primary-color: #4caf50;
+  --theme-accent-color: #ff9800;
+  --theme-background-color: #f5f5f5;
+  --theme-text-color: #212121;
+  --theme-text-secondary: #757575;
+  --theme-border-color: #e0e0e0;
+  --theme-shadow: rgba(76, 175, 80, 0.1);
+}
+
+/**
+ * Usage example:
+ *
+ * .my-component {
+ *   background-color: var(--theme-background-color);
+ *   color: var(--theme-text-color);
+ *   border: 1px solid var(--theme-border-color);
+ * }
+ *
+ * .primary-button {
+ *   background-color: var(--theme-primary-color);
+ *   color: white;
+ * }
+ *
+ * .accent-button {
+ *   background-color: var(--theme-accent-color);
+ *   color: white;
+ * }
+ */

@@ -1,0 +1,73 @@
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { THEMES } from './themes/theme-config';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ThemeService {
+  private currentThemeSubject = new BehaviorSubject<string>('default');
+  public currentTheme$: Observable<string> = this.currentThemeSubject.asObservable();
+
+  constructor() {
+    // Initialize with default theme on service creation
+    this.setTheme('default');
+  }
+
+  /**
+   * Sets the current theme by applying the data-theme attribute to the document element
+   * @param themeName - The name of the theme to apply (must exist in THEMES configuration)
+   */
+  setTheme(themeName: string): void {
+    if (!THEMES[themeName]) {
+      console.warn(`Theme "${themeName}" not found. Falling back to default theme.`);
+      themeName = 'default';
+    }
+
+    document.documentElement.setAttribute('data-theme', themeName);
+    this.currentThemeSubject.next(themeName);
+  }
+
+  /**
+   * Maps route paths to themes and applies the appropriate theme
+   * This allows automatic theme switching based on the current route
+   * @param route - The current route path
+   */
+  setThemeFromRoute(route: string): void {
+    const routeThemeMap: Record<string, string> = {
+      '/app1': 'app1',
+      '/app2': 'app2',
+    };
+
+    // Extract the first segment of the route (e.g., '/app1/dashboard' -> '/app1')
+    const baseRoute = '/' + route.split('/').filter(Boolean)[0];
+    const themeName = routeThemeMap[baseRoute] || 'default';
+
+    this.setTheme(themeName);
+  }
+
+  /**
+   * Gets the current active theme name
+   * @returns The name of the currently active theme
+   */
+  getCurrentTheme(): string {
+    return this.currentThemeSubject.value;
+  }
+
+  /**
+   * Gets the theme configuration object for a given theme name
+   * @param themeName - The name of the theme
+   * @returns The Theme configuration object or undefined if not found
+   */
+  getThemeConfig(themeName: string) {
+    return THEMES[themeName];
+  }
+
+  /**
+   * Gets all available themes
+   * @returns Record of all theme configurations
+   */
+  getAllThemes() {
+    return THEMES;
+  }
+}

@@ -2,7 +2,14 @@
   "name": "@org/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "start": "npm run stop && nx run-many -t serve -p shell,app1,app2 --parallel=3",
+    "stop": "lsof -ti :4200 -ti :4201 -ti :4202 | xargs kill -9 2>/dev/null || true",
+    "app1": "npm run stop && nx run-many -t serve -p shell,app1 --parallel=2",
+    "app2": "npm run stop && nx run-many -t serve -p shell,app2 --parallel=2",
+    "build:all": "nx run-many -t build -p shell,app1,app2",
+    "build:remotes": "nx run-many -t build -p app1,app2"
+  },
   "private": true,
   "dependencies": {
     "@angular-devkit/build-angular": "21.2.7",
@@ -14,6 +21,7 @@
     "@angular/platform-server": "21.2.9",
     "@angular/router": "21.2.9",
     "@angular/ssr": "21.2.7",
+    "es-module-shims": "^2.8.0",
     "express": "^4.21.2",
     "rxjs": "~7.8.0",
     "zone.js": "0.16.0"
@@ -21,6 +29,7 @@
   "devDependencies": {
     "@analogjs/vite-plugin-angular": "2.2.0",
     "@analogjs/vitest-angular": "2.2.0",
+    "@angular-architects/native-federation": "^22.0.3",
     "@angular-devkit/core": "21.2.7",
     "@angular-devkit/schematics": "21.2.7",
     "@angular/build": "21.2.7",
@@ -44,6 +53,7 @@
     "@oxc-project/runtime": "^0.115.0",
     "@playwright/test": "^1.36.0",
     "@schematics/angular": "21.2.7",
+    "@softarc/native-federation-orchestrator": "^4.2.2",
     "@swc-node/register": "1.11.1",
     "@swc/core": "1.15.8",
     "@swc/helpers": "0.5.18",

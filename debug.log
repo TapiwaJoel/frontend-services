@@ -1,0 +1,18 @@
+[2026-07-03T07:10:14.033Z] Detecting TypeScript workspace from: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-03T07:10:14.035Z] Found TypeScript dependency at: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-03T07:10:14.036Z] Found comprehensive base TypeScript configuration at: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-03T07:10:14.036Z] Found common monorepo directory structure (packages) at: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-03T07:10:14.036Z] New best workspace candidate: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services (score: 100, type: unknown)
+[2026-07-03T07:10:14.036Z] Selected workspace root: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services (score: 100)
+[2026-07-03T07:10:14.037Z] No workspace configuration detected, using single-project mode: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-03T07:10:14.037Z] Starting TSServer manager with workspace: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-03T07:10:14.037Z] TSServer Manager ready (using connection pool)
+[2026-07-03T07:19:45.459Z] Detecting TypeScript workspace from: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-03T07:19:45.460Z] Found TypeScript dependency at: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-03T07:19:45.460Z] Found comprehensive base TypeScript configuration at: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-03T07:19:45.461Z] Found common monorepo directory structure (packages) at: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-03T07:19:45.461Z] New best workspace candidate: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services (score: 100, type: unknown)
+[2026-07-03T07:19:45.461Z] Selected workspace root: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services (score: 100)
+[2026-07-03T07:19:45.461Z] No workspace configuration detected, using single-project mode: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-03T07:19:45.461Z] Starting TSServer manager with workspace: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-03T07:19:45.462Z] TSServer Manager ready (using connection pool)

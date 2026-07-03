@@ -1,0 +1,24 @@
+<div class="notification" [class]="'notification--' + notification.type">
+  <div class="notification__content">
+    <span class="notification__icon">
+      @switch (notification.type) {
+        @case ('success') {
+          <span>&#10003;</span>
+        }
+        @case ('error') {
+          <span>&#10005;</span>
+        }
+        @case ('warning') {
+          <span>&#9888;</span>
+        }
+        @case ('info') {
+          <span>&#8505;</span>
+        }
+      }
+    </span>
+    <span class="notification__message">{{ notification.message }}</span>
+  </div>
+  <button class="notification__dismiss" (click)="onDismiss()" aria-label="Dismiss notification">
+    &times;
+  </button>
+</div>
