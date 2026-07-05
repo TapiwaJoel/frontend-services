@@ -68,9 +68,7 @@
     }
   },
   "release": {
-    "projects": [
-      "api"
-    ],
+    "projects": [],
     "projectsRelationship": "independent",
     "docker": {
       "skipVersionActions": true

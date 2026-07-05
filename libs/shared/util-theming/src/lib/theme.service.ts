@@ -1,13 +1,12 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
 import { THEMES } from './themes/theme-config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ThemeService {
-  private currentThemeSubject = new BehaviorSubject<string>('default');
-  public currentTheme$: Observable<string> = this.currentThemeSubject.asObservable();
+  private currentThemeSignal = signal<string>('default');
+  public currentTheme = this.currentThemeSignal.asReadonly();
 
   constructor() {
     // Initialize with default theme on service creation
@@ -25,7 +24,7 @@ export class ThemeService {
     }
 
     document.documentElement.setAttribute('data-theme', themeName);
-    this.currentThemeSubject.next(themeName);
+    this.currentThemeSignal.set(themeName);
   }
 
   /**
@@ -51,7 +50,7 @@ export class ThemeService {
    * @returns The name of the currently active theme
    */
   getCurrentTheme(): string {
-    return this.currentThemeSubject.value;
+    return this.currentThemeSignal();
   }
 
   /**

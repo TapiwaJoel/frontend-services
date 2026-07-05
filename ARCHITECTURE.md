@@ -485,7 +485,7 @@ export class DataFormComponent {
     this.dataService.save(data).subscribe(() => {
       this.eventBus.emit({
         type: 'DATA_UPDATED',
-        payload: { entityId: data.id, entityType: 'product' },
+        payload: { entityId: data.id, entityType: 'item' },
         source: 'app1'
       });
     });
@@ -498,8 +498,8 @@ export class DataListComponent {
 
   ngOnInit() {
     this.eventBus.on('DATA_UPDATED').subscribe(event => {
-      if (event.payload.entityType === 'product') {
-        this.refreshProductList();
+      if (event.payload.entityType === 'item') {
+        this.refreshDataList();
       }
     });
   }
@@ -944,19 +944,19 @@ libs/
 │  └───────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────┘
                           │
-          ┌───────────────┼───────────────┐
-          │               │               │
-┌─────────▼──────┐ ┌──────▼──────┐ ┌─────▼─────────┐
-│  Remote App1   │ │ Remote App2 │ │   Shop App    │
-│  ┌──────────┐  │ │ ┌──────────┐│ │ ┌──────────┐  │
-│  │ May use: │  │ │ │ May use: ││ │ │ May use: │  │
-│  │ • auth   │  │ │ │ • auth   ││ │ │ • auth   │  │
-│  │ • events │  │ │ │ • events ││ │ │ • models │  │
-│  │ • theme  │  │ │ │ • theme  ││ │ │ • data   │  │
-│  └──────────┘  │ │ └──────────┘│ │ └──────────┘  │
-└────────────────┘ └─────────────┘ └───────────────┘
-          │               │               │
-          └───────────────┼───────────────┘
+          ┌───────────────┴───────────────┐
+          │                               │
+┌─────────▼──────┐             ┌──────────▼──────┐
+│  Remote App1   │             │  Remote App2     │
+│  ┌──────────┐  │             │  ┌──────────┐   │
+│  │ May use: │  │             │  │ May use: │   │
+│  │ • auth   │  │             │  │ • auth   │   │
+│  │ • events │  │             │  │ • events │   │
+│  │ • theme  │  │             │  │ • theme  │   │
+│  └──────────┘  │             │  └──────────┘   │
+└────────────────┘             └─────────────────┘
+          │                               │
+          └───────────────┬───────────────┘
                           │
               ┌───────────▼──────────┐
               │  Shared Libraries    │

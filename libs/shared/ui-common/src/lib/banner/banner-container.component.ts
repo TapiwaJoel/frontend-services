@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BannerService } from '../services/banner.service';
 import { BannerComponent } from './banner.component';
@@ -9,7 +9,7 @@ import { BannerComponent } from './banner.component';
   imports: [CommonModule, BannerComponent],
   template: `
     <div class="banner-container">
-      @for (banner of banners$ | async; track banner.id) {
+      @for (banner of banners(); track banner.id) {
         <app-banner
           [banner]="banner"
           (dismiss)="onDismiss($event)">
@@ -26,11 +26,8 @@ import { BannerComponent } from './banner.component';
   `]
 })
 export class BannerContainerComponent {
-  banners$;
-
-  constructor(private bannerService: BannerService) {
-    this.banners$ = this.bannerService.banners$;
-  }
+  private bannerService = inject(BannerService);
+  banners = this.bannerService.banners;
 
   onDismiss(id: string): void {
     this.bannerService.dismiss(id);

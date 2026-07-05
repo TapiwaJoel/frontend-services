@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
 
 export interface BannerAction {
   label: string;
@@ -18,26 +17,25 @@ export interface Banner {
   providedIn: 'root'
 })
 export class BannerService {
-  private bannersSubject = new BehaviorSubject<Banner[]>([]);
-  public banners$: Observable<Banner[]> = this.bannersSubject.asObservable();
+  private bannersSignal = signal<Banner[]>([]);
+  public banners = this.bannersSignal.asReadonly();
 
   show(banner: Omit<Banner, 'id'>): void {
     const id = this.generateId();
     const newBanner: Banner = { id, ...banner };
 
-    const currentBanners = this.bannersSubject.value;
-    this.bannersSubject.next([...currentBanners, newBanner]);
+    const currentBanners = this.bannersSignal();
+    this.bannersSignal.set([...currentBanners, newBanner]);
   }
 
   dismiss(id: string): void {
-    const currentBanners = this.bannersSubject.value;
-    this.bannersSubject.next(
-      currentBanners.filter(banner => banner.id !== id)
+    this.bannersSignal.update(banners =>
+      banners.filter(banner => banner.id !== id)
     );
   }
 
   clear(): void {
-    this.bannersSubject.next([]);
+    this.bannersSignal.set([]);
   }
 
   private generateId(): string {

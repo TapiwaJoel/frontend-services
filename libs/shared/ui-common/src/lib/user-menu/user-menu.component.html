@@ -1,37 +1,39 @@
-<div class="user-menu" *ngIf="user">
-  <button class="user-menu__trigger" (click)="toggleMenu()" aria-label="User menu">
-    @if (user.avatar) {
-      <img [src]="user.avatar" [alt]="user.name" class="user-menu__avatar">
-    } @else {
-      <div class="user-menu__avatar user-menu__avatar--initials">
-        {{ getInitials(user.name) }}
+@if (user) {
+  <div class="user-menu">
+    <button class="user-menu__trigger" (click)="toggleMenu()" aria-label="User menu">
+      @if (user.avatar) {
+        <img [src]="user.avatar" [alt]="user.name" class="user-menu__avatar">
+      } @else {
+        <div class="user-menu__avatar user-menu__avatar--initials">
+          {{ getInitials(user.name) }}
+        </div>
+      }
+      <span class="user-menu__name">{{ user.name }}</span>
+      <span class="user-menu__chevron" [class.user-menu__chevron--open]="isMenuOpen">
+        &#9662;
+      </span>
+    </button>
+
+    @if (isMenuOpen) {
+      <div class="user-menu__overlay" (click)="closeMenu()"></div>
+      <div class="user-menu__dropdown">
+        <div class="user-menu__header">
+          <div class="user-menu__user-info">
+            <div class="user-menu__user-name">{{ user.name }}</div>
+            <div class="user-menu__user-email">{{ user.email }}</div>
+          </div>
+        </div>
+        <div class="user-menu__divider"></div>
+        <button class="user-menu__item" (click)="onViewDevices()">
+          <span class="user-menu__item-icon">&#128241;</span>
+          <span>My Devices</span>
+        </button>
+        <div class="user-menu__divider"></div>
+        <button class="user-menu__item user-menu__item--logout" (click)="onLogout()">
+          <span class="user-menu__item-icon">&#x2192;</span>
+          <span>Logout</span>
+        </button>
       </div>
     }
-    <span class="user-menu__name">{{ user.name }}</span>
-    <span class="user-menu__chevron" [class.user-menu__chevron--open]="isMenuOpen">
-      &#9662;
-    </span>
-  </button>
-
-  @if (isMenuOpen) {
-    <div class="user-menu__overlay" (click)="closeMenu()"></div>
-    <div class="user-menu__dropdown">
-      <div class="user-menu__header">
-        <div class="user-menu__user-info">
-          <div class="user-menu__user-name">{{ user.name }}</div>
-          <div class="user-menu__user-email">{{ user.email }}</div>
-        </div>
-      </div>
-      <div class="user-menu__divider"></div>
-      <button class="user-menu__item" (click)="onViewDevices()">
-        <span class="user-menu__item-icon">&#128241;</span>
-        <span>My Devices</span>
-      </button>
-      <div class="user-menu__divider"></div>
-      <button class="user-menu__item user-menu__item--logout" (click)="onLogout()">
-        <span class="user-menu__item-icon">&#x2192;</span>
-        <span>Logout</span>
-      </button>
-    </div>
-  }
-</div>
+  </div>
+}

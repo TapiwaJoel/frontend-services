@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, delay } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Injectable, signal, computed, inject } from '@angular/core';
+import { Observable, of, delay } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import { TokenService } from './token.service';
 
@@ -13,17 +13,15 @@ import { TokenService } from './token.service';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly currentUserSubject = new BehaviorSubject<User | null>(null);
+  private tokenService = inject(TokenService);
 
-  public readonly currentUser$ = this.currentUserSubject.asObservable();
+  private readonly currentUserSignal = signal<User | null>(null);
 
-  public readonly isAuthenticated$ = this.currentUser$.pipe(
-    map(user => !!user)
-  );
+  public readonly currentUser = this.currentUserSignal.asReadonly();
 
-  constructor(
-    private tokenService: TokenService
-  ) {
+  public readonly isAuthenticated = computed(() => !!this.currentUserSignal());
+
+  constructor() {
     this.initializeAuth();
   }
 
@@ -57,7 +55,7 @@ export class AuthService {
       tap(response => {
         this.tokenService.setToken(response.token);
         this.tokenService.setRefreshToken(response.refreshToken);
-        this.currentUserSubject.next(response.user);
+        this.currentUserSignal.set(response.user);
       }),
       map(response => response.user)
     );
@@ -72,7 +70,7 @@ export class AuthService {
       delay(100),
       tap(() => {
         this.tokenService.clearTokens();
-        this.currentUserSubject.next(null);
+        this.currentUserSignal.set(null);
       })
     );
   }
@@ -116,17 +114,17 @@ export class AuthService {
     return of({ user: mockUser }).pipe(
       delay(100),
       tap(response => {
-        this.currentUserSubject.next(response.user);
+        this.currentUserSignal.set(response.user);
       }),
       map(() => true)
     );
   }
 
   getCurrentUser(): User | null {
-    return this.currentUserSubject.value;
+    return this.currentUserSignal();
   }
 
-  isAuthenticated(): boolean {
-    return !!this.currentUserSubject.value;
+  isAuthenticatedValue(): boolean {
+    return !!this.currentUserSignal();
   }
 }

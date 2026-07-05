@@ -24,7 +24,6 @@ This repository showcases a **single entry point micro-frontend architecture** p
 - **Remote Applications (Pure Modules)**: Build-only remote modules that can ONLY be accessed through the shell
 - **App Selector UI**: Dashboard interface for selecting which application to run
 - **Shared Libraries**: Reusable code shared across applications (authentication, theming, event bus, UI components)
-- **API Services**: Backend services with product data
 
 ### Single Entry Point Pattern
 
@@ -130,12 +129,10 @@ frontend-services/
 │   │   │   └── main.ts                 # Empty - pure remote module
 │   │   └── project.json                # Build-only (no serve targets)
 │   │
-│   ├── api/                      # Backend API service
-│   │   └── [Express API with product data]
-│   │
-│   ├── shell-e2e/                # E2E tests for shell
-│   ├── app1-e2e/                 # E2E tests for app1
-│   └── app2-e2e/                 # E2E tests for app2
+│   └── e2e/                      # End-to-end tests
+│       ├── shell/                # E2E tests for shell
+│       ├── app1/                 # E2E tests for app1
+│       └── app2/                 # E2E tests for app2
 │
 ├── libs/
 │   └── shared/                   # Shared libraries
@@ -167,13 +164,6 @@ frontend-services/
 │               └── theme-config.ts
 │
 ├── packages/
-│   ├── shop/                     # Shop-specific libraries
-│   │   ├── feature-products/
-│   │   ├── feature-product-detail/
-│   │   ├── data/
-│   │   └── shared-ui/
-│   ├── api/
-│   │   └── products/             # Product API library
 │   └── shared/
 │       └── models/               # Shared data models
 │
@@ -213,7 +203,6 @@ frontend-services/
 ### 5. Authentication Flow
 - **Route Guards**: Protect routes with authentication checks
 - **Token Management**: JWT token storage and refresh logic
-- **HTTP Interceptor**: Automatic token injection in API calls
 - **Logout Service**: Coordinated logout across all applications
 
 ### 6. Theming System
@@ -301,7 +290,6 @@ npm run build:all
 | Shell (Host) | 4200 | ✅ Yes | Single entry point, app orchestrator |
 | App1 (Remote) | N/A | ❌ No | Pure remote module, build-only |
 | App2 (Remote) | N/A | ❌ No | Pure remote module, build-only |
-| API (Optional) | 3000 | ✅ Yes | Backend API service |
 
 ## Development Workflow
 
@@ -561,19 +549,19 @@ npx nx test shell --watch
 npx nx run-many --target=e2e
 
 # Run e2e tests for specific app
-npx nx e2e shell-e2e
+npx nx e2e e2e-shell
 
 # Run e2e tests in headed mode
-npx nx e2e shell-e2e --headed
+npx nx e2e e2e-shell --headed
 
 # Run e2e tests in UI mode
-npx nx e2e shell-e2e --ui
+npx nx e2e e2e-shell --ui
 ```
 
 ### Test Structure
 
 - **Unit Tests**: Located alongside source files (`.spec.ts`)
-- **E2E Tests**: Separate projects (`*-e2e`) using Playwright
+- **E2E Tests**: Consolidated under `apps/e2e/` (`e2e-*` projects) using Playwright
 - **Test Setup**: Vitest for unit tests, Playwright for e2e
 
 ## Build and Deployment
@@ -644,12 +632,6 @@ example.com/remotes/app2/ → App2
 #### Docker Deployment
 
 ```bash
-# Build Docker images
-npx nx run api:docker:build
-
-# Run Docker containers
-npx nx run api:docker:run
-
 # Use Nx Release for versioning
 npx nx release
 ```
@@ -662,7 +644,6 @@ Create environment-specific configuration files:
 // environments/environment.prod.ts
 export const environment = {
   production: true,
-  apiUrl: 'https://api.example.com',
   federationManifest: '/assets/federation.manifest.json'
 };
 ```

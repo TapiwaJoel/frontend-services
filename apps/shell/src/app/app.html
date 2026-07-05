@@ -1,4 +1,4 @@
-<app-shell-layout [user]="user$ | async" [theme]="(currentTheme$ | async) || 'default'">
+<app-shell-layout [user]="user()" [theme]="currentTheme() || 'default'">
   <div slot="notifications">
     <app-notification-container></app-notification-container>
   </div>
@@ -8,7 +8,7 @@
   </div>
 
   <div slot="header-actions">
-    <app-user-menu [user]="user$ | async"></app-user-menu>
+    <app-user-menu [user]="user()"></app-user-menu>
   </div>
 
   <router-outlet></router-outlet>

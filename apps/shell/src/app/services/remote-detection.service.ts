@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
 
 export interface FederationManifest {
   [key: string]: string;
@@ -10,7 +9,8 @@ export interface FederationManifest {
 })
 export class RemoteDetectionService {
   private manifest: FederationManifest = {};
-  private availableRemotes$ = new BehaviorSubject<string[]>([]);
+  private availableRemotesSignal = signal<string[]>([]);
+  public availableRemotes = this.availableRemotesSignal.asReadonly();
   private checkCache = new Map<string, { available: boolean; timestamp: number }>();
   private readonly CACHE_DURATION = 30000; // 30 seconds
   private readonly REQUEST_TIMEOUT = 5000; // 5 seconds
@@ -94,23 +94,16 @@ export class RemoteDetectionService {
       .filter(([_, available]) => available)
       .map(([name, _]) => name);
 
-    this.availableRemotes$.next(availableNames);
+    this.availableRemotesSignal.set(availableNames);
 
     return results;
-  }
-
-  /**
-   * Get an observable of available remote names
-   */
-  getAvailableRemotes(): Observable<string[]> {
-    return this.availableRemotes$.asObservable();
   }
 
   /**
    * Get available remotes synchronously (from last check)
    */
   getAvailableRemotesSync(): string[] {
-    return this.availableRemotes$.value;
+    return this.availableRemotesSignal();
   }
 
   /**
