@@ -7,14 +7,14 @@ export const THEMES: Record<string, Theme> = {
     accentColor: '#ff4081',
     backgroundColor: '#ffffff',
   },
-  app1: {
-    name: 'app1',
+  umdzidzisi: {
+    name: 'umdzidzisi',
     primaryColor: '#e91e63',
     accentColor: '#9c27b0',
     backgroundColor: '#fafafa',
   },
-  app2: {
-    name: 'app2',
+  umtengesi: {
+    name: 'umtengesi',
     primaryColor: '#4caf50',
     accentColor: '#ff9800',
     backgroundColor: '#f5f5f5',

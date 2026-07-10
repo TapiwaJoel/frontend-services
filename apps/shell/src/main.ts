@@ -1,6 +1,16 @@
 import { initFederation } from '@angular-architects/native-federation';
+import { environment } from './environments/environment';
 
-initFederation('federation.manifest.json')
-  .catch(err => console.error(err))
+// Extract URLs from environment configuration
+// Supports both string format (legacy) and object format (with auth config)
+const remoteUrls: Record<string, string> = {};
+Object.entries(environment.remotes).forEach(([name, config]) => {
+  remoteUrls[name] = typeof config === 'string' ? config : config.url;
+});
+
+// Register all remotes from environment configuration
+// This only registers URLs, actual loading happens lazily when routes are accessed
+initFederation(remoteUrls)
+  .catch(err => console.error('Federation initialization error:', err))
   .then(_ => import('./bootstrap'))
-  .catch(err => console.error(err));
+  .catch(err => console.error('Bootstrap error:', err));

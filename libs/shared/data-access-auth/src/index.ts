@@ -8,6 +8,7 @@ export * from './lib/services/logout.service';
 
 // Guards
 export * from './lib/guards/auth.guard';
+export * from './lib/guards/conditional-auth.guard';
 
 // Interceptors
 export * from './lib/interceptors/auth.interceptor';

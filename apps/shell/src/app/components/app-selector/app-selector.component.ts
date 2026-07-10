@@ -24,16 +24,40 @@ export class AppSelectorComponent implements OnInit {
   // All configured applications
   private allApps: RemoteApp[] = [
     {
-      id: 'app1',
-      name: 'Application 1',
-      description: 'First remote application module',
-      route: '/app1'
+      id: 'umdzidzisi-website',
+      name: 'Umdzidzisi Website',
+      description: 'Umdzidzisi public website module',
+      route: '/umdzidzisi-website'
     },
     {
-      id: 'app2',
-      name: 'Application 2',
-      description: 'Second remote application module',
-      route: '/app2'
+      id: 'umdzidzisi-admin',
+      name: 'Umdzidzisi Admin',
+      description: 'Umdzidzisi admin portal module',
+      route: '/umdzidzisi-admin'
+    },
+    {
+      id: 'umdzidzisi-client',
+      name: 'Umdzidzisi Client',
+      description: 'Umdzidzisi client application module',
+      route: '/umdzidzisi-client'
+    },
+    {
+      id: 'umtengesi-website',
+      name: 'Umtengesi Website',
+      description: 'Umtengesi public website module',
+      route: '/umtengesi-website'
+    },
+    {
+      id: 'umtengesi-admin',
+      name: 'Umtengesi Admin',
+      description: 'Umtengesi admin portal module',
+      route: '/umtengesi-admin'
+    },
+    {
+      id: 'umtengesi-client',
+      name: 'Umtengesi Client',
+      description: 'Umtengesi client application module',
+      route: '/umtengesi-client'
     }
   ];
 
@@ -48,6 +72,9 @@ export class AppSelectorComponent implements OnInit {
 
   private async loadAvailableApps() {
     this.isLoading = true;
+
+    // Check which remotes are available
+    await this.remoteDetection.checkAllRemotes();
 
     // Get list of available remotes
     const availableRemoteNames = this.remoteDetection.getAvailableRemotesSync();

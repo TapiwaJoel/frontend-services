@@ -29,16 +29,20 @@ export default [
               onlyDependOnLibsWithTags: ['scope:shared'],
             },
             {
-              sourceTag: 'scope:app1',
+              sourceTag: 'scope:umdzidzisi',
               onlyDependOnLibsWithTags: ['scope:shared'],
             },
             {
-              sourceTag: 'scope:app2',
+              sourceTag: 'scope:umtengesi',
               onlyDependOnLibsWithTags: ['scope:shared'],
             },
             {
               sourceTag: 'type:feature',
-              onlyDependOnLibsWithTags: ['type:data-access', 'type:ui', 'type:util'],
+              onlyDependOnLibsWithTags: [
+                'type:data-access',
+                'type:ui',
+                'type:util',
+              ],
             },
             {
               sourceTag: 'type:ui',

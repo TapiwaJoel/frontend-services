@@ -34,11 +34,11 @@ export class ThemeService {
    */
   setThemeFromRoute(route: string): void {
     const routeThemeMap: Record<string, string> = {
-      '/app1': 'app1',
-      '/app2': 'app2',
+      '/umdzidzisi': 'umdzidzisi',
+      '/umtengesi': 'umtengesi',
     };
 
-    // Extract the first segment of the route (e.g., '/app1/dashboard' -> '/app1')
+    // Extract the first segment of the route (e.g., '/umdzidzisi/dashboard' -> '/umdzidzisi')
     const baseRoute = '/' + route.split('/').filter(Boolean)[0];
     const themeName = routeThemeMap[baseRoute] || 'default';
 

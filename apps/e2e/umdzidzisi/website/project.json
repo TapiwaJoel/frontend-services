@@ -1,0 +1,9 @@
+{
+  "name": "umdzidzisi-website-e2e",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/e2e/umdzidzisi/website/src",
+  "implicitDependencies": ["umdzidzisi-website"],
+  "// targets": "to see all targets run: nx show project umdzidzisi-website-e2e --web",
+  "targets": {}
+}

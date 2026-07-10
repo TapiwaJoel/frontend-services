@@ -20,8 +20,10 @@ A production-ready Angular monorepo implementing a **single entry point micro-fr
 
 This repository showcases a **single entry point micro-frontend architecture** powered by Angular, NX, and Native Federation. It consists of:
 
-- **Shell Application (Host)**: The single entry point that orchestrates and loads remote applications
-- **Remote Applications (Pure Modules)**: Build-only remote modules that can ONLY be accessed through the shell
+- **Shell Application (Host)**: The single entry point that orchestrates and loads remote applications (Port 4200)
+- **Remote Applications (Pure Modules)**: Build-only remote modules organized into nested domains
+  - **umdzidzisi**: Contains website (4201), admin (4203), and client (4205) applications
+  - **umtengesi**: Contains website (4202), admin (4204), and client (4206) applications
 - **App Selector UI**: Dashboard interface for selecting which application to run
 - **Shared Libraries**: Reusable code shared across applications (authentication, theming, event bus, UI components)
 
@@ -54,7 +56,7 @@ This architecture enforces **single entry point access**:
 │                        ** SINGLE ENTRY POINT **                   │
 │  ┌────────────────────────────────────────────────────────────┐  │
 │  │  • Authentication & Authorization                          │  │
-│  │  • App Selector Dashboard (Choose App1 or App2)            │  │
+│  │  • App Selector Dashboard                                  │  │
 │  │  • Native Federation Orchestration                         │  │
 │  │  • Centralized Routing                                     │  │
 │  │  • Shared Service Singletons                               │  │
@@ -64,12 +66,18 @@ This architecture enforces **single entry point access**:
 │                                 ↓                                 │
 │  ┌────────────────────────────────────────────────────────────┐  │
 │  │              <router-outlet>                               │  │
-│  │  ┌──────────────────────┐    ┌──────────────────────┐     │  │
-│  │  │   App 1 (Remote)     │ OR │   App 2 (Remote)     │     │  │
-│  │  │  • Pure Module       │    │  • Pure Module       │     │  │
-│  │  │  • Build-Only        │    │  • Build-Only        │     │  │
-│  │  │  • No Standalone     │    │  • No Standalone     │     │  │
-│  │  └──────────────────────┘    └──────────────────────┘     │  │
+│  │                                                            │  │
+│  │  Umdzidzisi Domain (Nested Structure)                           │  │
+│  │  ├── umdzidzisi-website (Port 4201) - Public-facing website     │  │
+│  │  ├── umdzidzisi-admin   (Port 4203) - Administration portal     │  │
+│  │  └── umdzidzisi-client  (Port 4205) - Client dashboard          │  │
+│  │                                                            │  │
+│  │  Umtengesi Domain (Nested Structure)                           │  │
+│  │  ├── umtengesi-website (Port 4202) - Public-facing website     │  │
+│  │  ├── umtengesi-admin   (Port 4204) - Administration portal     │  │
+│  │  └── umtengesi-client  (Port 4206) - Client dashboard          │  │
+│  │                                                            │  │
+│  │  All remotes: Pure Modules • Build-Only • No Standalone   │  │
 │  └────────────────────────────────────────────────────────────┘  │
 └──────────────────────────────────────────────────────────────────┘
                                  │
@@ -87,7 +95,8 @@ This architecture enforces **single entry point access**:
 Key Points:
 ✅ Users access ONLY the shell at localhost:4200
 ✅ App selector UI lets users choose which app to run
-✅ Remote apps (app1, app2) cannot run independently
+✅ 6 remote apps organized in nested domain structure
+✅ Each domain has website, admin, and client variants
 ✅ All authentication handled by shell
 ✅ Remote apps built automatically when shell starts
 ```
@@ -111,28 +120,72 @@ frontend-services/
 │   │   │   └── federation.manifest.json # Remote app manifest
 │   │   └── project.json                # NX project configuration
 │   │
-│   ├── app1/                     # Remote application 1 (pure remote module)
-│   │   ├── src/
-│   │   │   ├── app/
-│   │   │   │   ├── app.ts              # Exposed component (export default)
-│   │   │   │   ├── app.config.ts
-│   │   │   │   └── app.routes.ts
-│   │   │   └── main.ts                 # Empty - pure remote module
-│   │   └── project.json                # Build-only (no serve targets)
+│   ├── umdzidzisi/                     # Umdzidzisi domain (nested structure)
+│   │   ├── website/              # Public-facing website (port 4201)
+│   │   │   ├── src/
+│   │   │   │   ├── app/
+│   │   │   │   │   ├── app.ts          # Exposed component
+│   │   │   │   │   ├── app.config.ts
+│   │   │   │   │   └── app.routes.ts
+│   │   │   │   └── main.ts             # Empty - pure remote module
+│   │   │   └── project.json            # Build-only (no serve targets)
+│   │   │
+│   │   ├── admin/                # Administration portal (port 4203)
+│   │   │   ├── src/
+│   │   │   │   ├── app/
+│   │   │   │   │   ├── app.ts          # Exposed component
+│   │   │   │   │   ├── app.config.ts
+│   │   │   │   │   └── app.routes.ts
+│   │   │   │   └── main.ts             # Empty - pure remote module
+│   │   │   └── project.json            # Build-only (no serve targets)
+│   │   │
+│   │   └── client/               # Client dashboard (port 4205)
+│   │       ├── src/
+│   │       │   ├── app/
+│   │       │   │   ├── app.ts          # Exposed component
+│   │       │   │   ├── app.config.ts
+│   │       │   │   └── app.routes.ts
+│   │       │   └── main.ts             # Empty - pure remote module
+│   │       └── project.json            # Build-only (no serve targets)
 │   │
-│   ├── app2/                     # Remote application 2 (pure remote module)
-│   │   ├── src/
-│   │   │   ├── app/
-│   │   │   │   ├── app.ts              # Exposed component
-│   │   │   │   ├── app.config.ts
-│   │   │   │   └── app.routes.ts
-│   │   │   └── main.ts                 # Empty - pure remote module
-│   │   └── project.json                # Build-only (no serve targets)
+│   ├── umtengesi/                     # Umtengesi domain (nested structure)
+│   │   ├── website/              # Public-facing website (port 4202)
+│   │   │   ├── src/
+│   │   │   │   ├── app/
+│   │   │   │   │   ├── app.ts          # Exposed component
+│   │   │   │   │   ├── app.config.ts
+│   │   │   │   │   └── app.routes.ts
+│   │   │   │   └── main.ts             # Empty - pure remote module
+│   │   │   └── project.json            # Build-only (no serve targets)
+│   │   │
+│   │   ├── admin/                # Administration portal (port 4204)
+│   │   │   ├── src/
+│   │   │   │   ├── app/
+│   │   │   │   │   ├── app.ts          # Exposed component
+│   │   │   │   │   ├── app.config.ts
+│   │   │   │   │   └── app.routes.ts
+│   │   │   │   └── main.ts             # Empty - pure remote module
+│   │   │   └── project.json            # Build-only (no serve targets)
+│   │   │
+│   │   └── client/               # Client dashboard (port 4206)
+│   │       ├── src/
+│   │       │   ├── app/
+│   │       │   │   ├── app.ts          # Exposed component
+│   │       │   │   ├── app.config.ts
+│   │       │   │   └── app.routes.ts
+│   │       │   └── main.ts             # Empty - pure remote module
+│   │       └── project.json            # Build-only (no serve targets)
 │   │
-│   └── e2e/                      # End-to-end tests
-│       ├── shell/                # E2E tests for shell
-│       ├── app1/                 # E2E tests for app1
-│       └── app2/                 # E2E tests for app2
+│   └── e2e/                      # E2E test projects
+│       ├── shell/                # E2E tests for shell application
+│       ├── umdzidzisi/                 # E2E tests for Umdzidzisi domain
+│       │   ├── website/          # E2E tests for umdzidzisi-website
+│       │   ├── admin/            # E2E tests for umdzidzisi-admin
+│       │   └── client/           # E2E tests for umdzidzisi-client
+│       └── umtengesi/                 # E2E tests for Umtengesi domain
+│           ├── website/          # E2E tests for umtengesi-website
+│           ├── admin/            # E2E tests for umtengesi-admin
+│           └── client/           # E2E tests for umtengesi-client
 │
 ├── libs/
 │   └── shared/                   # Shared libraries
@@ -181,37 +234,56 @@ frontend-services/
 - **Pure Remote Modules**: Remote apps are build-only and cannot run independently
 - **Automatic Builds**: Remote apps built automatically when shell starts
 - **Unified Authentication**: Single authentication flow for all applications
+- **Nested Domain Structure**: Applications organized by domain (umdzidzisi, umtengesi) with multiple variants
 
-### 2. Micro-Frontend Architecture
+### 2. Application Types
+Each domain contains three distinct application types:
+
+- **Website (Ports 4201, 4202)**: Public-facing website applications
+  - Customer-facing features
+  - Marketing content and landing pages
+  - Public information and resources
+
+- **Admin (Ports 4203, 4204)**: Administrative portal applications
+  - Internal management tools
+  - Configuration and settings
+  - System administration features
+
+- **Client (Ports 4205, 4206)**: Client dashboard applications
+  - Authenticated user dashboards
+  - Client-specific features and data
+  - Personalized user experiences
+
+### 3. Micro-Frontend Architecture
 - **Independent Deployment**: Each application can be built and deployed separately
 - **Runtime Loading**: Remote applications are loaded on-demand at runtime
 - **Lazy Loading**: Routes lazy-load remote applications only when needed
 - **Version Independence**: Different applications can use different versions (with caution)
 
-### 3. Native Federation
+### 4. Native Federation
 - **Modern ESM**: Uses native ES modules instead of Webpack Module Federation
 - **Build Tool Agnostic**: Works with esbuild, Vite, and other modern build tools
 - **Optimized Loading**: Efficient chunk splitting and caching
 - **Manifest-Based**: Central manifest file for remote application discovery
 
-### 4. Shared Services (Singleton Pattern)
+### 5. Shared Services (Singleton Pattern)
 - **Authentication**: Centralized auth state shared across all applications
 - **Event Bus**: Pub/sub pattern for inter-application communication
 - **Theming**: Consistent theming across all micro-frontends
 - **UI Components**: Shared component library
 
-### 5. Authentication Flow
+### 6. Authentication Flow
 - **Route Guards**: Protect routes with authentication checks
 - **Token Management**: JWT token storage and refresh logic
 - **Logout Service**: Coordinated logout across all applications
 
-### 6. Theming System
+### 7. Theming System
 - **Route-Based Themes**: Automatic theme switching based on active route
 - **CSS Custom Properties**: Theme variables using CSS custom properties
-- **Multiple Themes**: Support for default, app1, and app2 themes
+- **Multiple Themes**: Support for default, umdzidzisi, and umtengesi themes
 - **Service-Based**: Centralized theme management
 
-### 7. Event Bus Communication
+### 8. Event Bus Communication
 - **Type-Safe Events**: TypeScript interfaces for event payloads
 - **RxJS Observable**: Reactive event streams
 - **Filtered Subscriptions**: Subscribe to specific event types
@@ -242,21 +314,28 @@ npm install
 
 #### Start the Application (Single Entry Point)
 
-Since this uses a **single entry point architecture**, you only need to start the shell:
+Since this uses a **single entry point architecture**, you only need to start the shell. You can start all applications or specific ones based on your development needs:
 
 ```bash
-# Start the shell (automatically builds all remote apps)
+# Start the shell with website remotes (umdzidzisi-website, umtengesi-website)
 npm start
 
-# Or using nx directly
-npm exec nx serve shell
+# Start specific domain applications
+npm run umdzidzisi:website    # Shell + umdzidzisi-website
+npm run umdzidzisi:admin      # Shell + umdzidzisi-admin
+npm run umdzidzisi:client     # Shell + umdzidzisi-client
+
+npm run umtengesi:website    # Shell + umtengesi-website
+npm run umtengesi:admin      # Shell + umtengesi-admin
+npm run umtengesi:client     # Shell + umtengesi-client
 ```
 
-The shell will:
-1. Automatically build app1 and app2 (configured via `dependsOn` in `project.json`)
-2. Start on `http://localhost:4200`
-3. Show the app selector dashboard
-4. Allow you to choose which remote app to run
+Each command will:
+1. Kill any existing processes on ports 4200-4206
+2. Build the selected remote app(s)
+3. Start the shell on `http://localhost:4200`
+4. Show the app selector dashboard
+5. Allow you to choose which remote app to run
 
 **Access the application**: Open `http://localhost:4200` in your browser
 
@@ -271,25 +350,36 @@ The shell will:
 #### Development Commands
 
 ```bash
-# Start the complete system
+# Start the complete system with primary websites
 npm start
 
-# Build all remote apps only (without starting shell)
-npm run build:remotes
+# Start specific application types
+npm run umdzidzisi:website    # Umdzidzisi website variant
+npm run umdzidzisi:admin      # Umdzidzisi admin variant
+npm run umdzidzisi:client     # Umdzidzisi client variant
 
-# Build everything (shell + all remotes)
-npm run build:all
+# Build commands
+npm run build:remotes   # Build all 6 remote apps
+npm run build:all       # Build shell + all remotes
 ```
 
-**Important**: Remote applications (app1, app2) do NOT have serve targets and cannot be started independently. They are built automatically when the shell starts.
+**Important**: Remote applications (umdzidzisi-website, umdzidzisi-admin, umdzidzisi-client, umtengesi-website, umtengesi-admin, umtengesi-client) do NOT have serve targets and cannot be started independently. They are built automatically when the shell starts.
 
 ### Application Architecture
 
 | Application | Port | Can Run Independently? | Purpose |
 |------------|------|----------------------|---------|
 | Shell (Host) | 4200 | ✅ Yes | Single entry point, app orchestrator |
-| App1 (Remote) | N/A | ❌ No | Pure remote module, build-only |
-| App2 (Remote) | N/A | ❌ No | Pure remote module, build-only |
+| **Umdzidzisi Domain** | | | |
+| umdzidzisi-website | 4201 | ❌ No | Public-facing website for Umdzidzisi |
+| umdzidzisi-admin | 4203 | ❌ No | Administration portal for Umdzidzisi |
+| umdzidzisi-client | 4205 | ❌ No | Client dashboard for Umdzidzisi |
+| **Umtengesi Domain** | | | |
+| umtengesi-website | 4202 | ❌ No | Public-facing website for Umtengesi |
+| umtengesi-admin | 4204 | ❌ No | Administration portal for Umtengesi |
+| umtengesi-client | 4206 | ❌ No | Client dashboard for Umtengesi |
+
+**Note**: All remote applications are pure modules, build-only, and cannot run independently. They are only accessible through the shell.
 
 ## Development Workflow
 
@@ -297,7 +387,7 @@ npm run build:all
 
 ```bash
 # Create a component in a specific application
-npx nx g @nx/angular:component my-component --project=app1
+npx nx g @nx/angular:component my-component --project=umdzidzisi
 
 # Create a component in a shared library
 npx nx g @nx/angular:component my-component --project=ui-common
@@ -473,7 +563,7 @@ export class App {
     });
 
     // Manually set theme
-    this.themeService.setTheme('app1');
+    this.themeService.setTheme('umdzidzisi');
   }
 }
 ```
@@ -488,31 +578,48 @@ The shell application uses a manifest file to discover remote applications:
 
 ```json
 {
-  "app1": "http://localhost:4201/remoteEntry.json",
-  "app2": "http://localhost:4202/remoteEntry.json"
+  "umdzidzisi-website": "http://localhost:4201/remoteEntry.json",
+  "umdzidzisi-admin": "http://localhost:4203/remoteEntry.json",
+  "umdzidzisi-client": "http://localhost:4205/remoteEntry.json",
+  "umtengesi-website": "http://localhost:4202/remoteEntry.json",
+  "umtengesi-admin": "http://localhost:4204/remoteEntry.json",
+  "umtengesi-client": "http://localhost:4206/remoteEntry.json"
 }
 ```
 
-In production, these URLs would point to your deployed remote applications.
+In production, these URLs would point to your deployed remote applications. Each remote application has its own dedicated port for development.
 
 ### Loading Remote Modules
 
-Remote applications are loaded using the `loadRemoteModule` function:
+Remote applications are loaded using the `loadRemoteModule` function. Here's an example of loading different application types:
 
 ```typescript
 import { loadRemoteModule } from '@angular-architects/native-federation';
 
 export const routes: Routes = [
+  // Umdzidzisi routes
   {
-    path: 'app1',
+    path: 'umdzidzisi/website',
     loadChildren: () =>
-      loadRemoteModule('app1', './Component').then((m) => [
-        {
-          path: '',
-          component: m.default,
-        },
+      loadRemoteModule('umdzidzisi-website', './Component').then((m) => [
+        { path: '', component: m.default },
       ]),
-  }
+  },
+  {
+    path: 'umdzidzisi/admin',
+    loadChildren: () =>
+      loadRemoteModule('umdzidzisi-admin', './Component').then((m) => [
+        { path: '', component: m.default },
+      ]),
+  },
+  {
+    path: 'umdzidzisi/client',
+    loadChildren: () =>
+      loadRemoteModule('umdzidzisi-client', './Component').then((m) => [
+        { path: '', component: m.default },
+      ]),
+  },
+  // Similar structure for umtengesi...
 ];
 ```
 
@@ -590,12 +697,21 @@ Build artifacts are generated in the `dist/` directory:
 dist/
 ├── apps/
 │   ├── shell/
-│   │   └── browser/          # Shell build output
-│   ├── app1/
-│   │   └── browser/          # App1 build output
-│   ├── app2/
-│   │   └── browser/          # App2 build output
-│   └── api/                  # API build output
+│   │   └── browser/              # Shell build output
+│   ├── umdzidzisi/
+│   │   ├── website/
+│   │   │   └── browser/          # Umdzidzisi website build output
+│   │   ├── admin/
+│   │   │   └── browser/          # Umdzidzisi admin build output
+│   │   └── client/
+│   │       └── browser/          # Umdzidzisi client build output
+│   └── umtengesi/
+│       ├── website/
+│       │   └── browser/          # Umtengesi website build output
+│       ├── admin/
+│       │   └── browser/          # Umtengesi admin build output
+│       └── client/
+│           └── browser/          # Umtengesi client build output
 ```
 
 ### Deployment Strategy
@@ -605,17 +721,25 @@ dist/
 Each application can be deployed to its own domain/subdomain:
 
 ```
-shell.example.com    → Shell application
-app1.example.com     → Remote app 1
-app2.example.com     → Remote app 2
+shell.example.com           → Shell application
+umdzidzisi-website.example.com    → Umdzidzisi website
+umdzidzisi-admin.example.com      → Umdzidzisi admin
+umdzidzisi-client.example.com     → Umdzidzisi client
+umtengesi-website.example.com    → Umtengesi website
+umtengesi-admin.example.com      → Umtengesi admin
+umtengesi-client.example.com     → Umtengesi client
 ```
 
 Update `federation.manifest.json` with production URLs:
 
 ```json
 {
-  "app1": "https://app1.example.com/remoteEntry.json",
-  "app2": "https://app2.example.com/remoteEntry.json"
+  "umdzidzisi-website": "https://umdzidzisi-website.example.com/remoteEntry.json",
+  "umdzidzisi-admin": "https://umdzidzisi-admin.example.com/remoteEntry.json",
+  "umdzidzisi-client": "https://umdzidzisi-client.example.com/remoteEntry.json",
+  "umtengesi-website": "https://umtengesi-website.example.com/remoteEntry.json",
+  "umtengesi-admin": "https://umtengesi-admin.example.com/remoteEntry.json",
+  "umtengesi-client": "https://umtengesi-client.example.com/remoteEntry.json"
 }
 ```
 
@@ -624,9 +748,13 @@ Update `federation.manifest.json` with production URLs:
 Deploy all applications together under the same domain:
 
 ```
-example.com/              → Shell
-example.com/remotes/app1/ → App1
-example.com/remotes/app2/ → App2
+example.com/                      → Shell
+example.com/remotes/umdzidzisi-website/ → Umdzidzisi website
+example.com/remotes/umdzidzisi-admin/   → Umdzidzisi admin
+example.com/remotes/umdzidzisi-client/  → Umdzidzisi client
+example.com/remotes/umtengesi-website/ → Umtengesi website
+example.com/remotes/umtengesi-admin/   → Umtengesi admin
+example.com/remotes/umtengesi-client/  → Umtengesi client
 ```
 
 #### Docker Deployment
@@ -659,9 +787,10 @@ export const environment = {
 
 ```bash
 # Development
-npx nx serve shell                          # Serve shell app
-npx nx serve app1                           # Serve remote app1
-npx nx run-many --target=serve --parallel   # Serve multiple apps
+npm start                                   # Start shell with website remotes
+npm run umdzidzisi:website                        # Start shell + umdzidzisi-website
+npm run umdzidzisi:admin                          # Start shell + umdzidzisi-admin
+npm run umtengesi:client                         # Start shell + umtengesi-client
 
 # Building
 npx nx build shell --configuration=production   # Production build

@@ -1,4 +1,8 @@
 {
-	"app1": "http://localhost:4201/remoteEntry.json",
-	"app2": "http://localhost:4202/remoteEntry.json"
+	"umdzidzisi-website": "http://localhost:4201/remoteEntry.json",
+	"umdzidzisi-admin": "http://localhost:4203/remoteEntry.json",
+	"umdzidzisi-client": "http://localhost:4205/remoteEntry.json",
+	"umtengesi-website": "http://localhost:4202/remoteEntry.json",
+	"umtengesi-admin": "http://localhost:4204/remoteEntry.json",
+	"umtengesi-client": "http://localhost:4206/remoteEntry.json"
 }

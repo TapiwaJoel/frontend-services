@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '@org/data-access-auth';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -111,6 +111,7 @@ import { SmartNavigationService } from '../services/smart-navigation.service';
 export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private smartNavigation = inject(SmartNavigationService);
 
   username = '';
@@ -125,7 +126,16 @@ export class LoginComponent {
 
     this.authService.login(credentials).subscribe({
       next: async () => {
-        await this.smartNavigation.navigateAfterLogin();
+        // Check for returnUrl in query params
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+
+        if (returnUrl) {
+          // Navigate to the intended destination
+          await this.router.navigateByUrl(returnUrl);
+        } else {
+          // Fallback to smart navigation
+          await this.smartNavigation.navigateAfterLogin();
+        }
       },
       error: (error) => {
         console.error('Login failed', error);

@@ -1,6 +1,30 @@
-import { Routes } from '@angular/router';
-import { authGuard } from '@org/data-access-auth';
+import { inject } from '@angular/core';
+import { Routes, type CanActivateFn } from '@angular/router';
+import { noAuthGuard, optionalAuthGuard, requiredAuthGuard } from '@org/data-access-auth';
 import { loadRemoteModule } from '@angular-architects/native-federation';
+import { AppConfigService } from './services/app-config.service';
+
+/**
+ * Helper function to get the appropriate auth guard based on app configuration
+ */
+function getAuthGuardForApp(appName: string): CanActivateFn {
+  return (route, state) => {
+    const appConfig = inject(AppConfigService);
+    const authMode = appConfig.getAuthMode(appName);
+
+    switch (authMode) {
+      case 'none':
+        return noAuthGuard(route, state);
+      case 'optional':
+        return optionalAuthGuard(route, state);
+      case 'required':
+        return requiredAuthGuard(route, state);
+      default:
+        // Fallback to required for safety
+        return requiredAuthGuard(route, state);
+    }
+  };
+}
 
 export const appRoutes: Routes = [
   {
@@ -10,15 +34,15 @@ export const appRoutes: Routes = [
   },
   {
     path: 'dashboard',
-    canActivate: [authGuard],
+    canActivate: [requiredAuthGuard],  // Dashboard always requires auth
     loadComponent: () =>
       import('./dashboard/dashboard.component').then((m) => m.DashboardComponent),
   },
   {
-    path: 'app1',
-    canActivate: [authGuard],
+    path: 'umdzidzisi-website',
+    canActivate: [getAuthGuardForApp('umdzidzisi-website')],  // Configured: no auth
     loadChildren: () =>
-      loadRemoteModule('app1', './Component').then((m) => [
+      loadRemoteModule('umdzidzisi-website', './Component').then((m) => [
         {
           path: '',
           component: m.default,
@@ -26,10 +50,54 @@ export const appRoutes: Routes = [
       ]),
   },
   {
-    path: 'app2',
-    canActivate: [authGuard],
+    path: 'umdzidzisi-admin',
+    canActivate: [getAuthGuardForApp('umdzidzisi-admin')],  // Configured: required auth
     loadChildren: () =>
-      loadRemoteModule('app2', './Component').then((m) => [
+      loadRemoteModule('umdzidzisi-admin', './Component').then((m) => [
+        {
+          path: '',
+          component: m.default,
+        },
+      ]),
+  },
+  {
+    path: 'umdzidzisi-client',
+    canActivate: [getAuthGuardForApp('umdzidzisi-client')],  // Configured: optional auth
+    loadChildren: () =>
+      loadRemoteModule('umdzidzisi-client', './Component').then((m) => [
+        {
+          path: '',
+          component: m.default,
+        },
+      ]),
+  },
+  {
+    path: 'umtengesi-website',
+    canActivate: [getAuthGuardForApp('umtengesi-website')],  // Configured: no auth
+    loadChildren: () =>
+      loadRemoteModule('umtengesi-website', './Component').then((m) => [
+        {
+          path: '',
+          component: m.default,
+        },
+      ]),
+  },
+  {
+    path: 'umtengesi-admin',
+    canActivate: [getAuthGuardForApp('umtengesi-admin')],  // Configured: required auth
+    loadChildren: () =>
+      loadRemoteModule('umtengesi-admin', './Component').then((m) => [
+        {
+          path: '',
+          component: m.default,
+        },
+      ]),
+  },
+  {
+    path: 'umtengesi-client',
+    canActivate: [getAuthGuardForApp('umtengesi-client')],  // Configured: optional auth
+    loadChildren: () =>
+      loadRemoteModule('umtengesi-client', './Component').then((m) => [
         {
           path: '',
           component: m.default,

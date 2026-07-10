@@ -30,21 +30,24 @@ This project implements a **micro-frontend architecture** using Angular and Nati
 
 ### Core Concepts
 
-1. **Shell Application (Host)**: The single orchestrator and entry point that loads remote applications
-2. **Remote Applications**: Pure remote modules exposed via Native Federation (cannot run independently)
+1. **Shell Application (Host)**: The single orchestrator and entry point that loads remote applications (Port 4200)
+2. **Remote Applications**: Pure remote modules organized in nested domain structure
+   - **Umdzidzisi Domain**: website (4201), admin (4203), client (4205)
+   - **Umtengesi Domain**: website (4202), admin (4204), client (4206)
 3. **Shared Libraries**: Common functionality shared across all applications
-4. **Federation Manifest**: Registry of available remote applications
+4. **Federation Manifest**: Registry of all 6 available remote applications
 5. **Singleton Services**: Shared service instances across all applications
 
 ### Single Entry Point Pattern
 
 This architecture enforces a **single entry point** through the shell application:
 
-- **Shell-Only Access**: Remote applications (app1, app2, etc.) can ONLY be accessed through the shell
+- **Shell-Only Access**: All 6 remote applications can ONLY be accessed through the shell
 - **No Independent Running**: Remote applications cannot be started or accessed independently
 - **App Selector UI**: Users select which application to run from the shell's dashboard
 - **Centralized Authentication**: All authentication and routing is handled by the shell
 - **Unified Navigation**: All inter-app navigation flows through the shell's routing system
+- **Domain Organization**: Applications organized by domain (umdzidzisi, umtengesi) with type variants (website, admin, client)
 
 #### Why Single Entry Point?
 
@@ -53,6 +56,64 @@ This architecture enforces a **single entry point** through the shell applicatio
 3. **Control**: Single point for access management and monitoring
 4. **Simplicity**: Users only need to know one URL (the shell)
 5. **Maintenance**: Easier to manage updates and deployments
+
+### Application Types
+
+Each domain (umdzidzisi, umtengesi) contains three distinct application types, each serving a specific purpose:
+
+#### 1. Website Applications (Ports 4201, 4202)
+**Purpose**: Public-facing website applications
+
+**Characteristics**:
+- Customer-facing features and content
+- Marketing and landing pages
+- Public information and resources
+- May have anonymous access with optional authentication
+- SEO-optimized content
+- Responsive design for all devices
+
+**Use Cases**:
+- Product catalogs
+- Company information
+- Blog and news articles
+- Contact forms
+- Public documentation
+
+#### 2. Admin Applications (Ports 4203, 4204)
+**Purpose**: Administrative portal applications
+
+**Characteristics**:
+- Internal management tools and interfaces
+- System configuration and settings
+- User and role management
+- Content management capabilities
+- Analytics and reporting dashboards
+- Requires elevated permissions
+
+**Use Cases**:
+- System administration
+- User account management
+- Content publishing workflows
+- System monitoring and logs
+- Configuration management
+
+#### 3. Client Applications (Ports 4205, 4206)
+**Purpose**: Client dashboard applications
+
+**Characteristics**:
+- Authenticated user dashboards
+- Personalized user experiences
+- Client-specific features and data
+- Self-service capabilities
+- Account management
+- Role-based access control
+
+**Use Cases**:
+- User profile management
+- Personal dashboards
+- Account settings
+- Service usage tracking
+- Support ticket management
 
 ## Micro-Frontend Pattern
 
@@ -152,14 +213,19 @@ initFederation('federation.manifest.json')
 
 ```json
 {
-  "app1": "http://localhost:4201/remoteEntry.json",
-  "app2": "http://localhost:4202/remoteEntry.json"
+  "umdzidzisi-website": "http://localhost:4201/remoteEntry.json",
+  "umdzidzisi-admin": "http://localhost:4203/remoteEntry.json",
+  "umdzidzisi-client": "http://localhost:4205/remoteEntry.json",
+  "umtengesi-website": "http://localhost:4202/remoteEntry.json",
+  "umtengesi-admin": "http://localhost:4204/remoteEntry.json",
+  "umtengesi-client": "http://localhost:4206/remoteEntry.json"
 }
 ```
 
-This manifest tells the shell where to find remote applications:
-- **Development**: Points to localhost with specific ports
+This manifest tells the shell where to find all 6 remote applications:
+- **Development**: Points to localhost with dedicated ports (4201-4206)
 - **Production**: Points to actual deployed URLs
+- **Naming Convention**: `{domain}-{type}` format for clear identification
 
 #### Route Configuration (app.routes.ts)
 
@@ -167,17 +233,32 @@ This manifest tells the shell where to find remote applications:
 import { loadRemoteModule } from '@angular-architects/native-federation';
 
 export const appRoutes: Routes = [
+  // Umdzidzisi Domain
   {
-    path: 'app1',
+    path: 'umdzidzisi/website',
     canActivate: [authGuard],
     loadChildren: () =>
-      loadRemoteModule('app1', './Component').then((m) => [
-        {
-          path: '',
-          component: m.default,
-        },
+      loadRemoteModule('umdzidzisi-website', './Component').then((m) => [
+        { path: '', component: m.default },
       ]),
-  }
+  },
+  {
+    path: 'umdzidzisi/admin',
+    canActivate: [authGuard],
+    loadChildren: () =>
+      loadRemoteModule('umdzidzisi-admin', './Component').then((m) => [
+        { path: '', component: m.default },
+      ]),
+  },
+  {
+    path: 'umdzidzisi/client',
+    canActivate: [authGuard],
+    loadChildren: () =>
+      loadRemoteModule('umdzidzisi-client', './Component').then((m) => [
+        { path: '', component: m.default },
+      ]),
+  },
+  // Similar structure for umtengesi domain...
 ];
 ```
 
@@ -208,22 +289,36 @@ The Native Federation plugin automatically:
 
 #### Running the Application
 
-To run the entire application stack:
+To run the application stack, you have several options:
 
 ```bash
-# Start the shell (this automatically builds all remote apps first)
+# Start the shell with website remotes (umdzidzisi-website, umtengesi-website)
 npm start
-# or
-npm exec nx serve shell
+
+# Start specific domain applications
+npm run umdzidzisi:website    # Shell + umdzidzisi-website
+npm run umdzidzisi:admin      # Shell + umdzidzisi-admin
+npm run umdzidzisi:client     # Shell + umdzidzisi-client
+
+npm run umtengesi:website    # Shell + umtengesi-website
+npm run umtengesi:admin      # Shell + umtengesi-admin
+npm run umtengesi:client     # Shell + umtengesi-client
 ```
 
-The shell's serve configuration includes a `dependsOn` array that automatically builds all remote applications before starting the shell:
+The shell's serve configuration includes a `dependsOn` array that automatically builds remote applications before starting:
 
 ```json
 {
   "serve": {
     "executor": "@angular-architects/native-federation:build",
-    "dependsOn": ["app1:build", "app2:build"],
+    "dependsOn": [
+      "umdzidzisi-website:build",
+      "umdzidzisi-admin:build",
+      "umdzidzisi-client:build",
+      "umtengesi-website:build",
+      "umtengesi-admin:build",
+      "umtengesi-client:build"
+    ],
     "options": {
       "target": "shell:serve-original:development"
     }
@@ -233,16 +328,47 @@ The shell's serve configuration includes a `dependsOn` array that automatically 
 
 **Important Notes:**
 - The shell runs on port 4200 (configured in `serve-original` target)
+- Each remote app has a dedicated port (4201-4206)
 - Remote apps do NOT have their own serve targets
 - Remote apps are built (not served) to generate `remoteEntry.json` files
 - All access to remote apps must go through the shell at `http://localhost:4200`
 
 #### Remote Application Structure
 
-Remote applications are configured as **pure remote modules**:
+Remote applications are configured as **pure remote modules** in a nested structure:
 
+```
+apps/
+├── umdzidzisi/                       # Umdzidzisi domain
+│   ├── website/                # Port 4201
+│   │   └── src/main.ts         # Pure remote module
+│   ├── admin/                  # Port 4203
+│   │   └── src/main.ts         # Pure remote module
+│   └── client/                 # Port 4205
+│       └── src/main.ts         # Pure remote module
+│
+├── umtengesi/                       # Umtengesi domain
+│   ├── website/                # Port 4202
+│   │   └── src/main.ts         # Pure remote module
+│   ├── admin/                  # Port 4204
+│   │   └── src/main.ts         # Pure remote module
+│   └── client/                 # Port 4206
+│       └── src/main.ts         # Pure remote module
+│
+└── e2e/                        # E2E test projects
+    ├── shell/                  # E2E tests for shell application
+    ├── umdzidzisi/                   # E2E tests for Umdzidzisi domain
+    │   ├── website/            # E2E tests for umdzidzisi-website
+    │   ├── admin/              # E2E tests for umdzidzisi-admin
+    │   └── client/             # E2E tests for umdzidzisi-client
+    └── umtengesi/                   # E2E tests for Umtengesi domain
+        ├── website/            # E2E tests for umtengesi-website
+        ├── admin/              # E2E tests for umtengesi-admin
+        └── client/             # E2E tests for umtengesi-client
+```
+
+Each remote application's main.ts:
 ```typescript
-// apps/app1/src/main.ts
 // This is a pure remote module - no standalone bootstrap
 // The shell application handles initialization and loading
 // All exposed modules are defined in federation.config.mjs
@@ -253,6 +379,7 @@ Key differences from traditional applications:
 - **No `bootstrapApplication()` call**: Remote apps don't bootstrap themselves
 - **No serve targets**: Remote apps cannot be started independently
 - **Build-only**: Remote apps are only built to generate federation bundles
+- **Nested structure**: Organized by domain (umdzidzisi/umtengesi) and type (website/admin/client)
 
 #### Adding to App Selector
 
@@ -262,25 +389,33 @@ To add a new remote application to the app selector:
 
 ```typescript
 availableApps: RemoteApp[] = [
+  // Umdzidzisi Domain
   {
-    id: 'app1',
-    name: 'Application 1',
-    description: 'First remote application module',
-    route: '/app1'
+    id: 'umdzidzisi-website',
+    name: 'Umdzidzisi Website',
+    description: 'Public-facing website for Umdzidzisi',
+    route: '/umdzidzisi/website'
   },
   {
-    id: 'app2',
-    name: 'Application 2',
-    description: 'Second remote application module',
-    route: '/app2'
+    id: 'umdzidzisi-admin',
+    name: 'Umdzidzisi Admin',
+    description: 'Administration portal for Umdzidzisi',
+    route: '/umdzidzisi/admin'
   },
-  // Add new app here
   {
-    id: 'app3',
-    name: 'Application 3',
-    description: 'Third remote application module',
-    route: '/app3'
-  }
+    id: 'umdzidzisi-client',
+    name: 'Umdzidzisi Client',
+    description: 'Client dashboard for Umdzidzisi',
+    route: '/umdzidzisi/client'
+  },
+  // Umtengesi Domain
+  {
+    id: 'umtengesi-website',
+    name: 'Umtengesi Website',
+    description: 'Public-facing website for Umtengesi',
+    route: '/umtengesi/website'
+  },
+  // ... and so on
 ];
 ```
 
@@ -289,12 +424,21 @@ availableApps: RemoteApp[] = [
 ```json
 {
   "serve": {
-    "dependsOn": ["app1:build", "app2:build", "app3:build"]
+    "dependsOn": [
+      "umdzidzisi-website:build",
+      "umdzidzisi-admin:build",
+      "umdzidzisi-client:build",
+      "umtengesi-website:build",
+      "umtengesi-admin:build",
+      "umtengesi-client:build"
+    ]
   }
 }
 ```
 
 3. **Add route configuration** (see `docs/ADDING_REMOTE_APPS.md` for details)
+
+4. **Update federation manifest** with new remote's URL
 
 ### Dependency Sharing
 
@@ -352,12 +496,12 @@ User logs in
   └── AuthService.login() called
       └── currentUser$ = { id: 1, name: "John" }
 
-Remote App1 loads
+Remote Umdzidzisi loads
   └── Injects AuthService
       └── Gets SAME instance from shell
           └── currentUser$ = { id: 1, name: "John" } ✓
 
-Remote App2 loads
+Remote Umtengesi loads
   └── Injects AuthService
       └── Gets SAME instance from shell
           └── currentUser$ = { id: 1, name: "John" } ✓
@@ -477,7 +621,7 @@ export class RemoteAppComponent {
 #### Example 2: Data Refresh Event
 
 ```typescript
-// Remote App1 - notify others about data changes
+// Remote Umdzidzisi - notify others about data changes
 export class DataFormComponent {
   private eventBus = inject(EventBusService);
 
@@ -486,13 +630,13 @@ export class DataFormComponent {
       this.eventBus.emit({
         type: 'DATA_UPDATED',
         payload: { entityId: data.id, entityType: 'item' },
-        source: 'app1'
+        source: 'umdzidzisi'
       });
     });
   }
 }
 
-// Remote App2 - refresh when data changes
+// Remote Umtengesi - refresh when data changes
 export class DataListComponent {
   private eventBus = inject(EventBusService);
 
@@ -548,7 +692,7 @@ The theming system uses **CSS custom properties** with a centralized service:
 │    --primary-color: #667eea;                             │
 │    --secondary-color: #764ba2;                           │
 │  }                                                        │
-│  [data-theme="app1"] {                                   │
+│  [data-theme="umdzidzisi"] {                                   │
 │    --primary-color: #667eea;                             │
 │    --secondary-color: #764ba2;                           │
 │  }                                                        │
@@ -576,8 +720,8 @@ export class ThemeService {
 
   setThemeFromRoute(route: string): void {
     const routeThemeMap: Record<string, string> = {
-      '/app1': 'app1',
-      '/app2': 'app2',
+      '/umdzidzisi': 'umdzidzisi',
+      '/umtengesi': 'umtengesi',
     };
     const baseRoute = '/' + route.split('/').filter(Boolean)[0];
     const themeName = routeThemeMap[baseRoute] || 'default';
@@ -612,8 +756,8 @@ export const THEMES: Record<string, Theme> = {
       text: '#333333'
     }
   },
-  app1: { /* ... */ },
-  app2: { /* ... */ }
+  umdzidzisi: { /* ... */ },
+  umtengesi: { /* ... */ }
 };
 ```
 
@@ -629,16 +773,16 @@ export const THEMES: Record<string, Theme> = {
   --text-color: #333333;
 }
 
-[data-theme="app1"] {
+[data-theme="umdzidzisi"] {
   --primary-color: #667eea;
   --secondary-color: #764ba2;
-  // ... other app1 colors
+  // ... other umdzidzisi colors
 }
 
-[data-theme="app2"] {
+[data-theme="umtengesi"] {
   --primary-color: #3b82f6;
   --secondary-color: #8b5cf6;
-  // ... other app2 colors
+  // ... other umtengesi colors
 }
 
 // Component styles use CSS variables
@@ -850,7 +994,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
 ```
 apps/
-├── shell/                          # Host application
+├── shell/                          # Host application (port 4200)
 │   ├── src/
 │   │   ├── app/
 │   │   │   ├── app.ts                    # Root component
@@ -862,24 +1006,53 @@ apps/
 │   │   ├── bootstrap.ts                  # Application bootstrap
 │   │   └── styles.scss                   # Global styles
 │   ├── public/
-│   │   └── federation.manifest.json      # Remote app registry
+│   │   └── federation.manifest.json      # Remote app registry (6 remotes)
 │   ├── project.json                      # NX configuration
 │   └── tsconfig.app.json                 # TypeScript config
 │
-├── app1/                           # Remote application
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── app.ts                    # Exposed component
-│   │   │   ├── app.config.ts
-│   │   │   └── app.routes.ts
-│   │   ├── main.ts                       # Entry point
-│   │   └── bootstrap.ts
-│   └── project.json                      # Federation config
+├── umdzidzisi/                           # Umdzidzisi domain (nested structure)
+│   ├── website/                    # Port 4201 - Public-facing website
+│   │   ├── src/
+│   │   │   ├── app/
+│   │   │   │   ├── app.ts                # Exposed component
+│   │   │   │   ├── app.config.ts
+│   │   │   │   └── app.routes.ts
+│   │   │   └── main.ts                   # Empty - pure remote
+│   │   └── project.json                  # Build-only config
+│   │
+│   ├── admin/                      # Port 4203 - Administration portal
+│   │   ├── src/
+│   │   │   ├── app/
+│   │   │   │   ├── app.ts
+│   │   │   │   ├── app.config.ts
+│   │   │   │   └── app.routes.ts
+│   │   │   └── main.ts
+│   │   └── project.json
+│   │
+│   └── client/                     # Port 4205 - Client dashboard
+│       ├── src/
+│       │   ├── app/
+│       │   │   ├── app.ts
+│       │   │   ├── app.config.ts
+│       │   │   └── app.routes.ts
+│       │   └── main.ts
+│       └── project.json
 │
-└── {app}-e2e/                      # E2E tests
-    ├── src/
-    │   └── example.spec.ts
-    └── playwright.config.ts
+├── umtengesi/                           # Umtengesi domain (nested structure)
+│   ├── website/                    # Port 4202
+│   ├── admin/                      # Port 4204
+│   └── client/                     # Port 4206
+│
+└── e2e/                            # E2E test projects
+    ├── shell/                      # E2E tests for shell application
+    ├── umdzidzisi/                       # E2E tests for Umdzidzisi domain
+    │   ├── website/                # E2E tests for umdzidzisi-website
+    │   ├── admin/                  # E2E tests for umdzidzisi-admin
+    │   └── client/                 # E2E tests for umdzidzisi-client
+    └── umtengesi/                       # E2E tests for Umtengesi domain
+        ├── website/                # E2E tests for umtengesi-website
+        ├── admin/                  # E2E tests for umtengesi-admin
+        └── client/                 # E2E tests for umtengesi-client
 ```
 
 ### Library Structure
@@ -947,7 +1120,7 @@ libs/
           ┌───────────────┴───────────────┐
           │                               │
 ┌─────────▼──────┐             ┌──────────▼──────┐
-│  Remote App1   │             │  Remote App2     │
+│  Remote Umdzidzisi   │             │  Remote Umtengesi     │
 │  ┌──────────┐  │             │  ┌──────────┐   │
 │  │ May use: │  │             │  │ May use: │   │
 │  │ • auth   │  │             │  │ • auth   │   │
@@ -1089,9 +1262,9 @@ npx nx affected:graph
 ```typescript
 // Example: Monitor remote loading time
 const startTime = performance.now();
-loadRemoteModule('app1', './Component').then(() => {
+loadRemoteModule('umdzidzisi', './Component').then(() => {
   const loadTime = performance.now() - startTime;
-  console.log(`App1 loaded in ${loadTime}ms`);
+  console.log(`Umdzidzisi loaded in ${loadTime}ms`);
 });
 ```
 
@@ -1134,7 +1307,7 @@ loadRemoteModule('app1', './Component').then(() => {
 
 ```typescript
 // Example: Safe remote loading with fallback
-loadRemoteModule('app1', './Component')
+loadRemoteModule('umdzidzisi', './Component')
   .then(module => module.default)
   .catch(error => {
     console.error('Failed to load remote:', error);

@@ -16,29 +16,21 @@ export class SmartNavigationService {
    */
   async navigateAfterLogin(): Promise<void> {
     try {
-      // Wait a bit for remotes to be detected (in case the check is still in progress)
-      await new Promise(resolve => setTimeout(resolve, 100));
+      // Check remotes sequentially and find the first available one
+      const firstAvailableRemote = await this.remoteDetection.checkRemotesSequentially();
 
-      // Get available remotes
-      const availableRemotes = this.remoteDetection.getAvailableRemotesSync();
+      console.log('First available remote:', firstAvailableRemote);
 
-      console.log('Available remotes:', availableRemotes);
-
-      if (availableRemotes.length === 0) {
+      if (!firstAvailableRemote) {
         // No remotes available - go to dashboard with error message
         console.warn('No remote applications are currently available');
         await this.router.navigate(['/dashboard'], {
           queryParams: { error: 'no-remotes' }
         });
-      } else if (availableRemotes.length === 1) {
-        // Only one remote available - auto-navigate to it
-        const remoteName = availableRemotes[0];
-        console.log(`Auto-navigating to ${remoteName}`);
-        await this.router.navigate([`/${remoteName}`]);
       } else {
-        // Multiple remotes available - show dashboard selector
-        console.log('Multiple remotes available, showing dashboard');
-        await this.router.navigate(['/dashboard']);
+        // Navigate to the first available remote
+        console.log(`Auto-navigating to ${firstAvailableRemote}`);
+        await this.router.navigate([`/${firstAvailableRemote}`]);
       }
     } catch (error) {
       console.error('Error during smart navigation:', error);

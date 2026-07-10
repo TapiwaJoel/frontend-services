@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { AppConfigService } from './app-config.service';
 
 export interface FederationManifest {
   [key: string]: string;
@@ -8,6 +9,7 @@ export interface FederationManifest {
   providedIn: 'root'
 })
 export class RemoteDetectionService {
+  private appConfig = inject(AppConfigService);
   private manifest: FederationManifest = {};
   private availableRemotesSignal = signal<string[]>([]);
   public availableRemotes = this.availableRemotesSignal.asReadonly();
@@ -16,20 +18,11 @@ export class RemoteDetectionService {
   private readonly REQUEST_TIMEOUT = 5000; // 5 seconds
 
   constructor() {
-    this.loadManifest();
-  }
-
-  /**
-   * Load the federation manifest from public folder
-   */
-  private async loadManifest(): Promise<void> {
-    try {
-      const response = await fetch('/federation.manifest.json');
-      this.manifest = await response.json();
-      await this.checkAllRemotes();
-    } catch (error) {
-      console.error('Failed to load federation manifest:', error);
-    }
+    // Use environment-based remote configuration via AppConfigService
+    // Development: localhost URLs with ports
+    // Production: relative paths for deployment
+    this.manifest = this.appConfig.getRemoteUrls();
+    // Note: Not checking remotes here - will be checked lazily when needed
   }
 
   /**
@@ -97,6 +90,30 @@ export class RemoteDetectionService {
     this.availableRemotesSignal.set(availableNames);
 
     return results;
+  }
+
+  /**
+   * Check remotes sequentially and return the first available one
+   * This reduces connection errors by stopping as soon as we find an available remote
+   */
+  async checkRemotesSequentially(): Promise<string | null> {
+    const remoteNames = Object.keys(this.manifest);
+    const availableRemotes: string[] = [];
+
+    for (const name of remoteNames) {
+      const available = await this.checkRemoteAvailability(name);
+      if (available) {
+        availableRemotes.push(name);
+        // Update the signal with what we found so far
+        this.availableRemotesSignal.set(availableRemotes);
+        // Return immediately after finding the first available remote
+        return name;
+      }
+    }
+
+    // No remotes available
+    this.availableRemotesSignal.set([]);
+    return null;
   }
 
   /**

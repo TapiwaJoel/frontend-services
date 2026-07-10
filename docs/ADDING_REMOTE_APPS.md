@@ -438,8 +438,8 @@ Add your new remote app to the shell's federation manifest:
 
 ```json
 {
-  "app1": "http://localhost:4201/remoteEntry.json",
-  "app2": "http://localhost:4202/remoteEntry.json",
+  "umdzidzisi": "http://localhost:4201/remoteEntry.json",
+  "umtengesi": "http://localhost:4202/remoteEntry.json",
   "my-remote-app": "http://localhost:4203/remoteEntry.json"
 }
 ```
@@ -458,7 +458,7 @@ Find the `serve` target and add your app to the `dependsOn` array:
 {
   "serve": {
     "executor": "@angular-architects/native-federation:build",
-    "dependsOn": ["app1:build", "app2:build", "my-remote-app:build"],
+    "dependsOn": ["umdzidzisi:build", "umtengesi:build", "my-remote-app:build"],
     "options": {
       "target": "shell:serve-original:development"
     }
@@ -477,16 +477,16 @@ Update the app selector component to include your new remote app:
 ```typescript
 availableApps: RemoteApp[] = [
   {
-    id: 'app1',
+    id: 'umdzidzisi',
     name: 'Application 1',
     description: 'First remote application module',
-    route: '/app1'
+    route: '/umdzidzisi'
   },
   {
-    id: 'app2',
+    id: 'umtengesi',
     name: 'Application 2',
     description: 'Second remote application module',
-    route: '/app2'
+    route: '/umtengesi'
   },
   // NEW: Add your remote app here
   {
@@ -522,10 +522,10 @@ export const appRoutes: Routes = [
       import('./dashboard/dashboard.component').then((m) => m.DashboardComponent),
   },
   {
-    path: 'app1',
+    path: 'umdzidzisi',
     canActivate: [authGuard],
     loadChildren: () =>
-      loadRemoteModule('app1', './Component').then((m) => [
+      loadRemoteModule('umdzidzisi', './Component').then((m) => [
         {
           path: '',
           component: m.default,
@@ -533,10 +533,10 @@ export const appRoutes: Routes = [
       ]),
   },
   {
-    path: 'app2',
+    path: 'umtengesi',
     canActivate: [authGuard],
     loadChildren: () =>
-      loadRemoteModule('app2', './Component').then((m) => [
+      loadRemoteModule('umtengesi', './Component').then((m) => [
         {
           path: '',
           component: m.default,
@@ -675,8 +675,8 @@ Check the following in your browser's Developer Tools:
 | App | Port | Can Run Independently? |
 |-----|------|----------------------|
 | Shell | 4200 | ✅ Yes (main entry point) |
-| App1 | N/A | ❌ No (pure remote module) |
-| App2 | N/A | ❌ No (pure remote module) |
+| Umdzidzisi | N/A | ❌ No (pure remote module) |
+| Umtengesi | N/A | ❌ No (pure remote module) |
 | Your New App | N/A | ❌ No (pure remote module) |
 
 **Note**: Remote apps do not have their own ports since they cannot run independently. They are only built to generate `remoteEntry.json` files.
@@ -868,8 +868,8 @@ loadRemoteModule('my-remote-app', './Component')
 
 ```json
 {
-  "app1": "https://app1.example.com/remoteEntry.json",
-  "app2": "https://app2.example.com/remoteEntry.json",
+  "umdzidzisi": "https://umdzidzisi.example.com/remoteEntry.json",
+  "umtengesi": "https://umtengesi.example.com/remoteEntry.json",
   "my-remote-app": "https://my-remote-app.example.com/remoteEntry.json"
 }
 ```
