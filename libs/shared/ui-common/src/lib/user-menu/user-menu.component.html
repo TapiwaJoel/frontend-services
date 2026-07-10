@@ -15,7 +15,12 @@
     </button>
 
     @if (isMenuOpen) {
-      <div class="user-menu__overlay" (click)="closeMenu()"></div>
+      <div class="user-menu__overlay"
+           (click)="closeMenu()"
+           (keydown.escape)="closeMenu()"
+           tabindex="0"
+           role="button"
+           aria-label="Close menu"></div>
       <div class="user-menu__dropdown">
         <div class="user-menu__header">
           <div class="user-menu__user-info">

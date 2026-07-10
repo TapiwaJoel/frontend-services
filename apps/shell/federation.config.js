@@ -26,7 +26,31 @@ export default withNativeFederation({
     'rxjs/fetch',
     'rxjs/testing',
     'rxjs/webSocket',
-    // Add further packages you don't need at runtime
+    // Angular DevKit & Build Tools
+    '@angular-devkit/build-angular',
+    '@angular-devkit/core',
+    '@angular-devkit/schematics',
+    '@angular/build',
+    // Testing Tools
+    'karma',
+    '@angular/localize/tools',
+    'vitest',
+    '@vitest/coverage-v8',
+    '@vitest/ui',
+    '@analogjs/vitest-angular',
+    '@playwright/test',
+    'jsdom',
+    // Build/Dev Tools
+    'vite',
+    'vite-tsconfig-paths',
+    'esbuild',
+    '@nx/vite',
+    '@nx/vitest',
+    // Server/SSR packages
+    '@angular/platform-server',
+    '@angular/ssr',
+    'express',
+    'supertest',
   ],
 
   // Please read our FAQ about sharing libs:

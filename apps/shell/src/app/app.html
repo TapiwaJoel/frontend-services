@@ -1,15 +1,15 @@
-<app-shell-layout [user]="user()" [theme]="currentTheme() || 'default'">
+<org-shell-layout [user]="user()" [theme]="currentTheme() || 'default'">
   <div slot="notifications">
-    <app-notification-container></app-notification-container>
+    <org-notification-container></org-notification-container>
   </div>
 
   <div slot="banners">
-    <app-banner-container></app-banner-container>
+    <org-banner-container></org-banner-container>
   </div>
 
   <div slot="header-actions">
-    <app-user-menu [user]="user()"></app-user-menu>
+    <org-user-menu [user]="user()"></org-user-menu>
   </div>
 
   <router-outlet></router-outlet>
-</app-shell-layout>
+</org-shell-layout>

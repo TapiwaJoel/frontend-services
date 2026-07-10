@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Notification } from '../services/notification.service';
 
 @Component({
-  selector: 'app-notification',
+  selector: 'org-notification',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './notification.component.html',

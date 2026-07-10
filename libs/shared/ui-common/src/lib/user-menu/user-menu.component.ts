@@ -9,7 +9,7 @@ export interface User {
 }
 
 @Component({
-  selector: 'app-user-menu',
+  selector: 'org-user-menu',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './user-menu.component.html',

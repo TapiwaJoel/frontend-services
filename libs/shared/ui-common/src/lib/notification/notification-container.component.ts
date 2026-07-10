@@ -4,16 +4,16 @@ import { NotificationService } from '../services/notification.service';
 import { NotificationComponent } from './notification.component';
 
 @Component({
-  selector: 'app-notification-container',
+  selector: 'org-notification-container',
   standalone: true,
   imports: [CommonModule, NotificationComponent],
   template: `
     <div class="notification-container">
       @for (notification of notifications(); track notification.id) {
-        <app-notification
+        <org-notification
           [notification]="notification"
           (dismiss)="onDismiss($event)">
-        </app-notification>
+        </org-notification>
       }
     </div>
   `,

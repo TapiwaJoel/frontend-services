@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Banner } from '../services/banner.service';
 
 @Component({
-  selector: 'app-banner',
+  selector: 'org-banner',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './banner.component.html',

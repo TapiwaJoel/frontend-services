@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { User } from '../user-menu/user-menu.component';
 
 @Component({
-  selector: 'app-shell-layout',
+  selector: 'org-shell-layout',
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './shell-layout.component.html',

@@ -4,16 +4,16 @@ import { BannerService } from '../services/banner.service';
 import { BannerComponent } from './banner.component';
 
 @Component({
-  selector: 'app-banner-container',
+  selector: 'org-banner-container',
   standalone: true,
   imports: [CommonModule, BannerComponent],
   template: `
     <div class="banner-container">
       @for (banner of banners(); track banner.id) {
-        <app-banner
+        <org-banner
           [banner]="banner"
           (dismiss)="onDismiss($event)">
-        </app-banner>
+        </org-banner>
       }
     </div>
   `,

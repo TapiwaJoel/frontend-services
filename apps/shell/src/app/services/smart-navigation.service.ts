@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { RemoteDetectionService } from './remote-detection.service';
 
@@ -6,10 +6,8 @@ import { RemoteDetectionService } from './remote-detection.service';
   providedIn: 'root'
 })
 export class SmartNavigationService {
-  constructor(
-    private router: Router,
-    private remoteDetection: RemoteDetectionService
-  ) {}
+  private router = inject(Router);
+  private remoteDetection = inject(RemoteDetectionService);
 
   /**
    * Navigate intelligently after login based on available remotes
