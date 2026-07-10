@@ -1,12 +1,12 @@
-import { withNativeFederation, shareAll } from '@angular-architects/native-federation/config';
+import { withNativeFederation, shareAll } from '@angular-architects/native-federation/config.js';
 
 export default withNativeFederation({
-  name: 'umdzidzisi-client',
+  name: 'umtengesi-admin',
 
 
 
   exposes: {
-    './Component': './apps/umdzidzisi/client/src/app/app.ts',
+    './Component': './apps/umtengesi/admin/src/app/app.ts',
   },
 
   shared: {
