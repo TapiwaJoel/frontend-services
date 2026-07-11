@@ -57,7 +57,7 @@ export class RemoteDetectionService {
       });
 
       return available;
-    } catch (error) {
+    } catch {
       // If fetch fails, remote is not available
       this.checkCache.set(remoteName, {
         available: false,
@@ -84,8 +84,8 @@ export class RemoteDetectionService {
 
     // Update the available remotes list
     const availableNames = Array.from(results.entries())
-      .filter(([_, available]) => available)
-      .map(([name, _]) => name);
+      .filter(([, available]) => available)
+      .map(([name]) => name);
 
     this.availableRemotesSignal.set(availableNames);
 
