@@ -30,6 +30,7 @@ This repository showcases a **single entry point micro-frontend architecture** p
 ### Single Entry Point Pattern
 
 This architecture enforces **single entry point access**:
+
 - ✅ All applications accessed through the shell at `http://localhost:4200`
 - ✅ Remote apps are pure modules - cannot run independently
 - ✅ App selector UI for choosing which application to run
@@ -229,6 +230,7 @@ frontend-services/
 ## Key Features
 
 ### 1. Single Entry Point Architecture
+
 - **Centralized Access**: All applications accessed through a single shell URL
 - **App Selector UI**: Interactive dashboard for choosing which application to run
 - **Pure Remote Modules**: Remote apps are build-only and cannot run independently
@@ -237,6 +239,7 @@ frontend-services/
 - **Nested Domain Structure**: Applications organized by domain (umdzidzisi, umtengesi) with multiple variants
 
 ### 2. Application Types
+
 Each domain contains three distinct application types:
 
 - **Website (Ports 4201, 4202)**: Public-facing website applications
@@ -255,35 +258,41 @@ Each domain contains three distinct application types:
   - Personalized user experiences
 
 ### 3. Micro-Frontend Architecture
+
 - **Independent Deployment**: Each application can be built and deployed separately
 - **Runtime Loading**: Remote applications are loaded on-demand at runtime
 - **Lazy Loading**: Routes lazy-load remote applications only when needed
 - **Version Independence**: Different applications can use different versions (with caution)
 
 ### 4. Native Federation
+
 - **Modern ESM**: Uses native ES modules instead of Webpack Module Federation
 - **Build Tool Agnostic**: Works with esbuild, Vite, and other modern build tools
 - **Optimized Loading**: Efficient chunk splitting and caching
 - **Manifest-Based**: Central manifest file for remote application discovery
 
 ### 5. Shared Services (Singleton Pattern)
+
 - **Authentication**: Centralized auth state shared across all applications
 - **Event Bus**: Pub/sub pattern for inter-application communication
 - **Theming**: Consistent theming across all micro-frontends
 - **UI Components**: Shared component library
 
 ### 6. Authentication Flow
+
 - **Route Guards**: Protect routes with authentication checks
 - **Token Management**: JWT token storage and refresh logic
 - **Logout Service**: Coordinated logout across all applications
 
 ### 7. Theming System
+
 - **Route-Based Themes**: Automatic theme switching based on active route
 - **CSS Custom Properties**: Theme variables using CSS custom properties
 - **Multiple Themes**: Support for default, umdzidzisi, and umtengesi themes
 - **Service-Based**: Centralized theme management
 
 ### 8. Event Bus Communication
+
 - **Type-Safe Events**: TypeScript interfaces for event payloads
 - **RxJS Observable**: Reactive event streams
 - **Filtered Subscriptions**: Subscribe to specific event types
@@ -300,12 +309,14 @@ Each domain contains three distinct application types:
 ### Installation
 
 1. **Clone the repository**
+
 ```bash
 git clone <repository-url>
 cd frontend-services
 ```
 
 2. **Install dependencies**
+
 ```bash
 npm install
 ```
@@ -331,6 +342,7 @@ npm run umtengesi:client     # Shell + umtengesi-client
 ```
 
 Each command will:
+
 1. Kill any existing processes on ports 4200-4206
 2. Build the selected remote app(s)
 3. Start the shell on `http://localhost:4200`
@@ -367,17 +379,17 @@ npm run build:all       # Build shell + all remotes
 
 ### Application Architecture
 
-| Application | Port | Can Run Independently? | Purpose |
-|------------|------|----------------------|---------|
-| Shell (Host) | 4200 | ✅ Yes | Single entry point, app orchestrator |
-| **Umdzidzisi Domain** | | | |
-| umdzidzisi-website | 4201 | ❌ No | Public-facing website for Umdzidzisi |
-| umdzidzisi-admin | 4203 | ❌ No | Administration portal for Umdzidzisi |
-| umdzidzisi-client | 4205 | ❌ No | Client dashboard for Umdzidzisi |
-| **Umtengesi Domain** | | | |
-| umtengesi-website | 4202 | ❌ No | Public-facing website for Umtengesi |
-| umtengesi-admin | 4204 | ❌ No | Administration portal for Umtengesi |
-| umtengesi-client | 4206 | ❌ No | Client dashboard for Umtengesi |
+| Application           | Port | Can Run Independently? | Purpose                              |
+| --------------------- | ---- | ---------------------- | ------------------------------------ |
+| Shell (Host)          | 4200 | ✅ Yes                 | Single entry point, app orchestrator |
+| **Umdzidzisi Domain** |      |                        |                                      |
+| umdzidzisi-website    | 4201 | ❌ No                  | Public-facing website for Umdzidzisi |
+| umdzidzisi-admin      | 4203 | ❌ No                  | Administration portal for Umdzidzisi |
+| umdzidzisi-client     | 4205 | ❌ No                  | Client dashboard for Umdzidzisi      |
+| **Umtengesi Domain**  |      |                        |                                      |
+| umtengesi-website     | 4202 | ❌ No                  | Public-facing website for Umtengesi  |
+| umtengesi-admin       | 4204 | ❌ No                  | Administration portal for Umtengesi  |
+| umtengesi-client      | 4206 | ❌ No                  | Client dashboard for Umtengesi       |
 
 **Note**: All remote applications are pure modules, build-only, and cannot run independently. They are only accessible through the shell.
 
@@ -415,12 +427,70 @@ npx nx lint shell
 npx nx lint shell --fix
 ```
 
+### Formatting
+
+```bash
+# Format all files with Prettier (includes Tailwind class sorting)
+npm run format
+
+# Check formatting without making changes
+npm run format:check
+```
+
 ### Type Checking
 
 ```bash
 # Check TypeScript types across all projects
 npx nx run-many --target=typecheck
 ```
+
+### Git Hooks
+
+This project uses **Husky** for automated git hooks to ensure code quality:
+
+#### Hooks in Place:
+
+1. **pre-commit** (Fast - 5-15 seconds)
+   - Runs Prettier and ESLint on staged files only
+   - Automatically sorts Tailwind CSS classes
+   - Managed by lint-staged for performance
+
+2. **pre-push** (Moderate - 30s-2min)
+   - Runs `nx affected -t lint build typecheck`
+   - Only checks projects affected by your changes
+   - Catches issues before they reach CI/CD
+
+3. **commit-msg** (Instant)
+   - Enforces conventional commit format
+   - Format: `type(scope): description`
+   - Example: `feat(shell): add navigation component`
+
+#### Valid Commit Types:
+
+- `feat`: New feature
+- `fix`: Bug fix
+- `chore`: Maintenance tasks
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting)
+- `refactor`: Code refactoring
+- `test`: Test additions/changes
+- `ci`: CI/CD changes
+
+#### Valid Scopes:
+
+`shell`, `umdzidzisi-website`, `umdzidzisi-admin`, `umdzidzisi-client`, `umtengesi-website`, `umtengesi-admin`, `umtengesi-client`, `ui-common`, `data-access-auth`, `util-event-bus`, `util-theming`, `models`, `deps`, `ci`, `workspace`
+
+#### Bypassing Hooks (use sparingly):
+
+```bash
+# Skip pre-commit hook
+git commit --no-verify
+
+# Skip pre-push hook
+git push --no-verify
+```
+
+**Note:** Hooks are configured in `.husky/` directory and run automatically. The `prepare` script in `package.json` ensures Husky is set up when you run `npm install`.
 
 ### Visualizing Dependencies
 
@@ -452,6 +522,7 @@ See the detailed guide in [docs/ADDING_REMOTE_APPS.md](docs/ADDING_REMOTE_APPS.m
 **Purpose**: Centralized authentication logic
 
 **Exports**:
+
 - `AuthService` - Login, logout, token refresh, user state management
 - `TokenService` - Token storage and retrieval
 - `LogoutService` - Coordinated logout
@@ -460,6 +531,7 @@ See the detailed guide in [docs/ADDING_REMOTE_APPS.md](docs/ADDING_REMOTE_APPS.m
 - `User` - User model interface
 
 **Usage**:
+
 ```typescript
 import { inject } from '@angular/core';
 import { AuthService, authGuard } from '@org/data-access-auth';
@@ -469,8 +541,8 @@ export const routes: Routes = [
   {
     path: 'protected',
     canActivate: [authGuard],
-    component: ProtectedComponent
-  }
+    component: ProtectedComponent,
+  },
 ];
 
 // In component
@@ -488,6 +560,7 @@ export class LoginComponent {
 **Purpose**: Shared UI components
 
 **Exports**:
+
 - `ShellLayoutComponent` - Main layout wrapper
 - `NotificationComponent` - Toast notifications
 - `BannerComponent` - Banner messages
@@ -496,6 +569,7 @@ export class LoginComponent {
 - `BannerService` - Banner management
 
 **Usage**:
+
 ```typescript
 import { NotificationService } from '@org/ui-common';
 
@@ -513,11 +587,13 @@ export class MyComponent {
 **Purpose**: Inter-application communication
 
 **Exports**:
+
 - `EventBusService` - Central event bus
 - `AppEvent` - Event model
 - Event type constants
 
 **Usage**:
+
 ```typescript
 import { EventBusService, AppEvent } from '@org/util-event-bus';
 
@@ -526,7 +602,7 @@ export class RemoteApp {
 
   ngOnInit() {
     // Subscribe to events
-    this.eventBus.on('USER_LOGGED_IN').subscribe(event => {
+    this.eventBus.on('USER_LOGGED_IN').subscribe((event) => {
       console.log('User logged in:', event.payload);
     });
 
@@ -534,7 +610,7 @@ export class RemoteApp {
     this.eventBus.emit({
       type: 'DATA_UPDATED',
       payload: { data: 'value' },
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }
 }
@@ -545,11 +621,13 @@ export class RemoteApp {
 **Purpose**: Application theming
 
 **Exports**:
+
 - `ThemeService` - Theme management
 - `Theme` - Theme model
 - `THEMES` - Theme configurations
 
 **Usage**:
+
 ```typescript
 import { ThemeService } from '@org/util-theming';
 
@@ -600,24 +678,15 @@ export const routes: Routes = [
   // Umdzidzisi routes
   {
     path: 'umdzidzisi/website',
-    loadChildren: () =>
-      loadRemoteModule('umdzidzisi-website', './Component').then((m) => [
-        { path: '', component: m.default },
-      ]),
+    loadChildren: () => loadRemoteModule('umdzidzisi-website', './Component').then((m) => [{ path: '', component: m.default }]),
   },
   {
     path: 'umdzidzisi/admin',
-    loadChildren: () =>
-      loadRemoteModule('umdzidzisi-admin', './Component').then((m) => [
-        { path: '', component: m.default },
-      ]),
+    loadChildren: () => loadRemoteModule('umdzidzisi-admin', './Component').then((m) => [{ path: '', component: m.default }]),
   },
   {
     path: 'umdzidzisi/client',
-    loadChildren: () =>
-      loadRemoteModule('umdzidzisi-client', './Component').then((m) => [
-        { path: '', component: m.default },
-      ]),
+    loadChildren: () => loadRemoteModule('umdzidzisi-client', './Component').then((m) => [{ path: '', component: m.default }]),
   },
   // Similar structure for umtengesi...
 ];
@@ -772,7 +841,7 @@ Create environment-specific configuration files:
 // environments/environment.prod.ts
 export const environment = {
   production: true,
-  federationManifest: '/assets/federation.manifest.json'
+  federationManifest: '/assets/federation.manifest.json',
 };
 ```
 

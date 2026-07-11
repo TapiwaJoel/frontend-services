@@ -1,0 +1,2 @@
+#!/bin/sh
+npx nx affected -t lint build typecheck --base=origin/main
