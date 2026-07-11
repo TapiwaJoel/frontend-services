@@ -1,38 +1,70 @@
-<div class="shell-layout" [attr.data-theme]="theme">
-  <header class="shell-layout__header">
-    <div class="shell-layout__header-content">
-      <div class="shell-layout__logo">
-        <a routerLink="/">
-          <h1>My App</h1>
+<div class="flex flex-col min-h-screen"
+     [attr.data-theme]="theme"
+     [ngClass]="{
+       'bg-gray-100': theme === 'light',
+       'bg-gray-900 text-gray-200': theme === 'dark'
+     }">
+  <header class="sticky top-0 z-[100] shadow-sm"
+          [ngClass]="{
+            'bg-white border-b border-gray-200': theme === 'light',
+            'bg-gray-800 border-b border-gray-700': theme === 'dark'
+          }">
+    <div class="flex items-center justify-between max-w-[1400px] mx-auto px-6 h-16 md:px-4">
+      <div>
+        <a routerLink="/" class="no-underline text-inherit">
+          <h1 class="m-0 text-2xl font-bold text-info">My App</h1>
         </a>
       </div>
-      <div class="shell-layout__header-actions">
+      <div class="flex items-center gap-4">
         <ng-content select="[slot=header-actions]"></ng-content>
       </div>
     </div>
   </header>
 
-  <div class="shell-layout__notification-area">
+  <div class="relative">
     <ng-content select="[slot=notifications]"></ng-content>
   </div>
 
-  <div class="shell-layout__banner-area">
+  <div class="relative">
     <ng-content select="[slot=banners]"></ng-content>
   </div>
 
-  <main class="shell-layout__main">
+  <main class="flex-1 max-w-[1400px] w-full mx-auto p-6 md:p-4">
     <ng-content></ng-content>
   </main>
 
-  <footer class="shell-layout__footer">
-    <div class="shell-layout__footer-content">
-      <div class="shell-layout__footer-copyright">
+  <footer class="mt-auto"
+          [ngClass]="{
+            'bg-white border-t border-gray-200': theme === 'light',
+            'bg-gray-800 border-t border-gray-700': theme === 'dark'
+          }">
+    <div class="flex items-center justify-between max-w-[1400px] mx-auto p-6 md:flex-col md:gap-4 md:p-4 md:text-center">
+      <div class="text-sm"
+           [ngClass]="{
+             'text-gray-600': theme === 'light',
+             'text-gray-400': theme === 'dark'
+           }">
         &copy; {{ currentYear }} My App. All rights reserved.
       </div>
-      <div class="shell-layout__footer-links">
-        <a href="/privacy">Privacy Policy</a>
-        <a href="/terms">Terms of Service</a>
-        <a href="/contact">Contact</a>
+      <div class="flex gap-6 md:flex-col md:gap-3">
+        <a href="/privacy"
+           class="text-sm no-underline transition-colors duration-200"
+           [ngClass]="{
+             'text-gray-600 hover:text-info': theme === 'light',
+             'text-gray-400 hover:text-gray-200': theme === 'dark'
+           }">Privacy Policy</a>
+        <a href="/terms"
+           class="text-sm no-underline transition-colors duration-200"
+           [ngClass]="{
+             'text-gray-600 hover:text-info': theme === 'light',
+             'text-gray-400 hover:text-gray-200': theme === 'dark'
+           }">Terms of Service</a>
+        <a href="/contact"
+           class="text-sm no-underline transition-colors duration-200"
+           [ngClass]="{
+             'text-gray-600 hover:text-info': theme === 'light',
+             'text-gray-400 hover:text-gray-200': theme === 'dark'
+           }">Contact</a>
       </div>
     </div>
   </footer>

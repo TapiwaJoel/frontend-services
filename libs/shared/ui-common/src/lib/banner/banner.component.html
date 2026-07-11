@@ -1,6 +1,12 @@
-<div class="banner" [class]="'banner--' + banner.type">
-  <div class="banner__content">
-    <span class="banner__icon">
+<div class="flex items-center justify-between py-3 px-6 mb-0 w-full text-white"
+     [ngClass]="{
+       'bg-success': banner.type === 'success',
+       'bg-error': banner.type === 'error',
+       'bg-warning': banner.type === 'warning',
+       'bg-info': banner.type === 'info'
+     }">
+  <div class="flex items-center gap-3 flex-1">
+    <span class="flex items-center justify-center w-5 h-5 rounded-full text-xs font-bold bg-white bg-opacity-20">
       @switch (banner.type) {
         @case ('success') {
           <span>&#10003;</span>
@@ -16,13 +22,14 @@
         }
       }
     </span>
-    <span class="banner__message">{{ banner.message }}</span>
+    <span class="flex-1 text-sm leading-relaxed">{{ banner.message }}</span>
   </div>
 
   @if (banner.actions && banner.actions.length > 0) {
-    <div class="banner__actions">
+    <div class="flex gap-2 ml-4">
       @for (action of banner.actions; track action.label) {
-        <button class="banner__action" (click)="onActionClick(action.handler)">
+        <button class="py-1.5 px-3 border border-white border-opacity-30 bg-white bg-opacity-10 rounded text-inherit text-xs cursor-pointer transition-colors duration-200 hover:bg-opacity-20"
+                (click)="onActionClick(action.handler)">
           {{ action.label }}
         </button>
       }
@@ -30,7 +37,9 @@
   }
 
   @if (banner.dismissible) {
-    <button class="banner__dismiss" (click)="onDismiss()" aria-label="Dismiss banner">
+    <button class="bg-transparent border-0 text-2xl cursor-pointer p-0 w-6 h-6 flex items-center justify-center ml-4 text-inherit opacity-80 transition-opacity duration-200 hover:opacity-100"
+            (click)="onDismiss()"
+            aria-label="Dismiss banner">
       &times;
     </button>
   }

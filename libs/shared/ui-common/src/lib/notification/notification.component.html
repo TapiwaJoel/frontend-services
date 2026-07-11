@@ -1,6 +1,18 @@
-<div class="notification" [class]="'notification--' + notification.type">
-  <div class="notification__content">
-    <span class="notification__icon">
+<div class="flex items-center justify-between p-3 mb-2 rounded bg-white shadow-notification animate-slide-in"
+     [ngClass]="{
+       'border-l-4 border-success': notification.type === 'success',
+       'border-l-4 border-error': notification.type === 'error',
+       'border-l-4 border-warning': notification.type === 'warning',
+       'border-l-4 border-info': notification.type === 'info'
+     }">
+  <div class="flex items-center gap-3 flex-1">
+    <span class="flex items-center justify-center w-6 h-6 rounded-full text-sm font-bold"
+          [ngClass]="{
+            'bg-success-light text-success': notification.type === 'success',
+            'bg-error-light text-error': notification.type === 'error',
+            'bg-warning-light text-warning': notification.type === 'warning',
+            'bg-info-light text-info': notification.type === 'info'
+          }">
       @switch (notification.type) {
         @case ('success') {
           <span>&#10003;</span>
@@ -16,9 +28,11 @@
         }
       }
     </span>
-    <span class="notification__message">{{ notification.message }}</span>
+    <span class="flex-1 text-sm leading-relaxed">{{ notification.message }}</span>
   </div>
-  <button class="notification__dismiss" (click)="onDismiss()" aria-label="Dismiss notification">
+  <button class="bg-transparent border-0 text-2xl cursor-pointer p-0 w-6 h-6 flex items-center justify-center text-gray-600 hover:text-gray-800 transition-colors duration-200"
+          (click)="onDismiss()"
+          aria-label="Dismiss notification">
     &times;
   </button>
 </div>

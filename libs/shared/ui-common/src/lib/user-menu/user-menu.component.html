@@ -1,41 +1,46 @@
 @if (user) {
-  <div class="user-menu">
-    <button class="user-menu__trigger" (click)="toggleMenu()" aria-label="User menu">
+  <div class="relative">
+    <button class="flex items-center gap-2 py-1.5 px-3 bg-transparent border border-gray-300 rounded cursor-pointer transition-all duration-200 hover:border-info hover:bg-gray-100"
+            (click)="toggleMenu()"
+            aria-label="User menu">
       @if (user.avatar) {
-        <img [src]="user.avatar" [alt]="user.name" class="user-menu__avatar">
+        <img [src]="user.avatar" [alt]="user.name" class="w-8 h-8 rounded-full object-cover">
       } @else {
-        <div class="user-menu__avatar user-menu__avatar--initials">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center bg-info text-white text-sm font-semibold">
           {{ getInitials(user.name) }}
         </div>
       }
-      <span class="user-menu__name">{{ user.name }}</span>
-      <span class="user-menu__chevron" [class.user-menu__chevron--open]="isMenuOpen">
+      <span class="text-sm font-medium text-gray-800">{{ user.name }}</span>
+      <span class="text-xs text-gray-600 transition-transform duration-200"
+            [ngClass]="{ 'rotate-180': isMenuOpen }">
         &#9662;
       </span>
     </button>
 
     @if (isMenuOpen) {
-      <div class="user-menu__overlay"
+      <div class="fixed top-0 left-0 right-0 bottom-0 z-[999]"
            (click)="closeMenu()"
            (keydown.escape)="closeMenu()"
            tabindex="0"
            role="button"
            aria-label="Close menu"></div>
-      <div class="user-menu__dropdown">
-        <div class="user-menu__header">
-          <div class="user-menu__user-info">
-            <div class="user-menu__user-name">{{ user.name }}</div>
-            <div class="user-menu__user-email">{{ user.email }}</div>
+      <div class="absolute top-full right-0 mt-1 min-w-60 bg-white border border-gray-300 rounded shadow-notification z-[1000] animate-dropdown-fade-in">
+        <div class="p-3">
+          <div class="flex flex-col gap-1">
+            <div class="text-sm font-semibold text-gray-800">{{ user.name }}</div>
+            <div class="text-xs text-gray-600">{{ user.email }}</div>
           </div>
         </div>
-        <div class="user-menu__divider"></div>
-        <button class="user-menu__item" (click)="onViewDevices()">
-          <span class="user-menu__item-icon">&#128241;</span>
+        <div class="h-px bg-gray-100 my-1"></div>
+        <button class="flex items-center gap-3 w-full py-2.5 px-4 bg-transparent border-0 text-left text-sm text-gray-800 cursor-pointer transition-colors duration-200 hover:bg-gray-100"
+                (click)="onViewDevices()">
+          <span class="text-base">&#128241;</span>
           <span>My Devices</span>
         </button>
-        <div class="user-menu__divider"></div>
-        <button class="user-menu__item user-menu__item--logout" (click)="onLogout()">
-          <span class="user-menu__item-icon">&#x2192;</span>
+        <div class="h-px bg-gray-100 my-1"></div>
+        <button class="flex items-center gap-3 w-full py-2.5 px-4 bg-transparent border-0 text-left text-sm text-error cursor-pointer transition-colors duration-200 hover:bg-error-light"
+                (click)="onLogout()">
+          <span class="text-base">&#x2192;</span>
           <span>Logout</span>
         </button>
       </div>
