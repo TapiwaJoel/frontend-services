@@ -57,6 +57,7 @@ npx nx g @nx/angular:app my-remote-app
 ```
 
 This creates:
+
 ```
 apps/
 ├── my-remote-app/
@@ -182,6 +183,7 @@ Update `apps/my-remote-app/project.json` to use Native Federation as a **pure re
 ```
 
 **Key differences from standalone apps:**
+
 - ❌ No `serve` target
 - ❌ No `serve-static` target
 - ❌ No `serve-original` target
@@ -223,7 +225,7 @@ export default withNativeFederation({
             strictVersion: true,
             requiredVersion: 'auto',
             build: 'package',
-            includeSecondaries: { keepAll: true }
+            includeSecondaries: { keepAll: true },
           },
         },
       },
@@ -234,16 +236,11 @@ export default withNativeFederation({
     '@org/shared/util-theming': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
   },
 
-  skip: [
-    'rxjs/ajax',
-    'rxjs/fetch',
-    'rxjs/testing',
-    'rxjs/webSocket',
-  ],
+  skip: ['rxjs/ajax', 'rxjs/fetch', 'rxjs/testing', 'rxjs/webSocket'],
 
   features: {
-    denseChunking: true
-  }
+    denseChunking: true,
+  },
 });
 ```
 
@@ -278,50 +275,52 @@ import { CommonModule } from '@angular/common';
       </div>
     </div>
   `,
-  styles: [`
-    .app-container {
-      padding: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+  styles: [
+    `
+      .app-container {
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
-    .app-header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 2rem;
-      border-radius: 8px;
-      margin-bottom: 2rem;
-    }
+      .app-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+      }
 
-    .app-header h1 {
-      margin: 0;
-    }
+      .app-header h1 {
+        margin: 0;
+      }
 
-    .app-content {
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+      .app-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
 
-    .feature-list h2 {
-      color: #333;
-      margin-bottom: 1rem;
-    }
+      .feature-list h2 {
+        color: #333;
+        margin-bottom: 1rem;
+      }
 
-    .feature-list ul {
-      list-style: none;
-      padding: 0;
-    }
+      .feature-list ul {
+        list-style: none;
+        padding: 0;
+      }
 
-    .feature-list li {
-      padding: 0.75rem;
-      margin-bottom: 0.5rem;
-      background: #f5f5f5;
-      border-left: 4px solid #667eea;
-      border-radius: 4px;
-    }
-  `]
+      .feature-list li {
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+        background: #f5f5f5;
+        border-left: 4px solid #667eea;
+        border-radius: 4px;
+      }
+    `,
+  ],
 })
 export class App {
   protected title = 'my-remote-app';
@@ -338,18 +337,12 @@ export default App;
 Update `apps/my-remote-app/src/app/app.config.ts`:
 
 ```typescript
-import {
-  ApplicationConfig,
-  provideBrowserGlobalErrorListeners,
-} from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideRouter(appRoutes)
-  ],
+  providers: [provideBrowserGlobalErrorListeners(), provideRouter(appRoutes)],
 };
 ```
 
@@ -365,13 +358,12 @@ export const appRoutes: Routes = [
   {
     path: '',
     redirectTo: 'home',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'home',
-    loadComponent: () =>
-      import('./home/home.component').then(m => m.HomeComponent)
-  }
+    loadComponent: () => import('./home/home.component').then((m) => m.HomeComponent),
+  },
 ];
 ```
 
@@ -381,23 +373,14 @@ If your remote app needs authentication, theming, or event bus:
 
 ```typescript
 // apps/my-remote-app/src/app/app.config.ts
-import {
-  ApplicationConfig,
-  provideBrowserGlobalErrorListeners,
-} from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { appRoutes } from './app.routes';
 import { authInterceptor } from '@org/data-access-auth';
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideRouter(appRoutes),
-    provideHttpClient(
-      withInterceptors([authInterceptor])
-    )
-  ],
+  providers: [provideBrowserGlobalErrorListeners(), provideRouter(appRoutes), provideHttpClient(withInterceptors([authInterceptor]))],
 };
 ```
 
@@ -419,11 +402,11 @@ export class App implements OnInit {
 
   ngOnInit() {
     // Use shared services
-    this.authService.currentUser$.subscribe(user => {
+    this.authService.currentUser$.subscribe((user) => {
       console.log('Current user:', user);
     });
 
-    this.eventBus.on('DATA_UPDATED').subscribe(event => {
+    this.eventBus.on('DATA_UPDATED').subscribe((event) => {
       console.log('Data updated:', event);
     });
   }
@@ -512,14 +495,12 @@ import { loadRemoteModule } from '@angular-architects/native-federation';
 export const appRoutes: Routes = [
   {
     path: 'login',
-    loadComponent: () =>
-      import('./login/login.component').then((m) => m.LoginComponent),
+    loadComponent: () => import('./login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: 'dashboard',
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('./dashboard/dashboard.component').then((m) => m.DashboardComponent),
+    loadComponent: () => import('./dashboard/dashboard.component').then((m) => m.DashboardComponent),
   },
   {
     path: 'umdzidzisi',
@@ -622,16 +603,19 @@ The shell will start on `http://localhost:4200` and automatically build all remo
 Check the following in your browser's Developer Tools:
 
 ✅ **Console Tab:**
+
 - No errors during remote module loading
 - No 404 errors for remoteEntry.json
 - Application loads successfully
 
 ✅ **Network Tab:**
+
 - `remoteEntry.json` loads successfully
 - Remote app chunks load on demand
 - No failed requests
 
 ✅ **Functionality:**
+
 - Your remote app displays correctly
 - Routing works within your app
 - Shared services (auth, event bus, theme) work correctly
@@ -640,14 +624,17 @@ Check the following in your browser's Developer Tools:
 ### Common Issues During Testing
 
 **Issue**: `Failed to fetch dynamically imported module`
+
 - **Solution**: Ensure your remote app is built (check dist/apps/my-remote-app/)
 - **Solution**: Verify federation manifest has correct URL
 
 **Issue**: `Cannot find module './Component'`
+
 - **Solution**: Ensure `app.ts` has `export default App;`
 - **Solution**: Check federation.config.mjs exposes './Component'
 
 **Issue**: Remote app doesn't appear in app selector
+
 - **Solution**: Verify you added it to `app-selector.component.ts`
 - **Solution**: Verify the route is defined in shell's `app.routes.ts`
 
@@ -655,16 +642,17 @@ Check the following in your browser's Developer Tools:
 
 ### Required Files for Remote Apps
 
-| File | Purpose | Required |
-|------|---------|----------|
-| `apps/my-remote-app/project.json` | NX and Federation build configuration | ✅ Yes |
-| `apps/my-remote-app/federation.config.mjs` | Native Federation configuration | ✅ Yes |
-| `apps/my-remote-app/src/main.ts` | Entry point (should be empty for pure remotes) | ✅ Yes |
-| `apps/my-remote-app/src/app/app.ts` | Root component (must export default) | ✅ Yes |
-| `apps/my-remote-app/src/app/app.config.ts` | Application configuration | ⚠️ Optional |
-| `apps/my-remote-app/src/app/app.routes.ts` | Route configuration | ⚠️ Optional |
+| File                                       | Purpose                                        | Required    |
+| ------------------------------------------ | ---------------------------------------------- | ----------- |
+| `apps/my-remote-app/project.json`          | NX and Federation build configuration          | ✅ Yes      |
+| `apps/my-remote-app/federation.config.mjs` | Native Federation configuration                | ✅ Yes      |
+| `apps/my-remote-app/src/main.ts`           | Entry point (should be empty for pure remotes) | ✅ Yes      |
+| `apps/my-remote-app/src/app/app.ts`        | Root component (must export default)           | ✅ Yes      |
+| `apps/my-remote-app/src/app/app.config.ts` | Application configuration                      | ⚠️ Optional |
+| `apps/my-remote-app/src/app/app.routes.ts` | Route configuration                            | ⚠️ Optional |
 
 **Important**: Remote apps do NOT have:
+
 - ❌ No `bootstrap.ts` file
 - ❌ No serve targets in `project.json`
 - ❌ No `initFederation()` call in `main.ts`
@@ -672,12 +660,12 @@ Check the following in your browser's Developer Tools:
 
 ### Application Ports
 
-| App | Port | Can Run Independently? |
-|-----|------|----------------------|
-| Shell | 4200 | ✅ Yes (main entry point) |
-| Umdzidzisi | N/A | ❌ No (pure remote module) |
-| Umtengesi | N/A | ❌ No (pure remote module) |
-| Your New App | N/A | ❌ No (pure remote module) |
+| App          | Port | Can Run Independently?     |
+| ------------ | ---- | -------------------------- |
+| Shell        | 4200 | ✅ Yes (main entry point)  |
+| Umdzidzisi   | N/A  | ❌ No (pure remote module) |
+| Umtengesi    | N/A  | ❌ No (pure remote module) |
+| Your New App | N/A  | ❌ No (pure remote module) |
 
 **Note**: Remote apps do not have their own ports since they cannot run independently. They are only built to generate `remoteEntry.json` files.
 
@@ -741,6 +729,7 @@ npx nx e2e my-remote-app-e2e --ui
 **Symptoms**: Blank page, console error "Cannot load remote module"
 
 **Solutions**:
+
 1. Verify the remote app is running (`npx nx serve my-remote-app`)
 2. Check the federation manifest has the correct URL
 3. Check browser console for specific errors
@@ -751,6 +740,7 @@ npx nx e2e my-remote-app-e2e --ui
 **Symptoms**: Error "Module './Component' not found"
 
 **Solutions**:
+
 1. Ensure the root component has `export default` at the end
 2. Verify the component is exported from `app.ts`
 3. Check the `loadRemoteModule` path is correct (`'./Component'`)
@@ -760,6 +750,7 @@ npx nx e2e my-remote-app-e2e --ui
 **Symptoms**: Authentication state not shared, events not received
 
 **Solutions**:
+
 1. Verify services are marked with `providedIn: 'root'`
 2. Check that the remote app imports shared libraries correctly
 3. Ensure dependencies are shared in Native Federation config
@@ -770,6 +761,7 @@ npx nx e2e my-remote-app-e2e --ui
 **Symptoms**: Error "Port 4204 is already in use"
 
 **Solutions**:
+
 1. Choose a different port in `project.json`
 2. Kill the process using that port
 3. Update the federation manifest with the new port
@@ -779,6 +771,7 @@ npx nx e2e my-remote-app-e2e --ui
 **Symptoms**: Build errors during `npx nx build my-remote-app`
 
 **Solutions**:
+
 1. Run `npm install` to ensure all dependencies are installed
 2. Check TypeScript errors: `npx nx typecheck my-remote-app`
 3. Check for circular dependencies
@@ -789,6 +782,7 @@ npx nx e2e my-remote-app-e2e --ui
 **Symptoms**: Changes not reflected without full reload
 
 **Solutions**:
+
 1. Restart the dev server
 2. Check for TypeScript errors
 3. Clear the NX cache: `npx nx reset`
@@ -832,8 +826,8 @@ Example:
 
 ```typescript
 loadRemoteModule('my-remote-app', './Component')
-  .then(m => m.default)
-  .catch(error => {
+  .then((m) => m.default)
+  .catch((error) => {
     console.error('Failed to load remote app:', error);
     return ErrorComponent; // Fallback component
   });
@@ -947,16 +941,15 @@ export class App implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Subscribe to auth state
-    this.authService.currentUser$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(user => {
-        this.currentUser = user;
-      });
+    this.authService.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
+      this.currentUser = user;
+    });
 
     // Listen for events
-    this.eventBus.on('DATA_UPDATED')
+    this.eventBus
+      .on('DATA_UPDATED')
       .pipe(takeUntil(this.destroy$))
-      .subscribe(event => {
+      .subscribe((event) => {
         console.log('Data updated:', event);
         this.handleDataUpdate(event);
       });
@@ -968,7 +961,7 @@ export class App implements OnInit, OnDestroy {
     this.eventBus.emit({
       type: 'APP_LOADED',
       payload: { appName: 'my-remote-app' },
-      source: 'my-remote-app'
+      source: 'my-remote-app',
     });
   }
 
@@ -988,6 +981,7 @@ export default App;
 ## Summary
 
 You now know how to:
+
 - Generate a new remote Angular application
 - Configure Native Federation
 - Expose components for remote loading
@@ -998,6 +992,7 @@ You now know how to:
 - Follow best practices
 
 For more information:
+
 - [README.md](../README.md) - Project overview
 - [ARCHITECTURE.md](../ARCHITECTURE.md) - Architecture details
 - [Native Federation Docs](https://github.com/angular-architects/module-federation-plugin)

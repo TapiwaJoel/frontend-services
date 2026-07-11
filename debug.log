@@ -61,3 +61,12 @@
 [2026-07-11T04:51:49.255Z] No workspace configuration detected, using single-project mode: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
 [2026-07-11T04:51:49.255Z] Starting TSServer manager with workspace: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
 [2026-07-11T04:51:49.255Z] TSServer Manager ready (using connection pool)
+[2026-07-11T05:39:07.587Z] Detecting TypeScript workspace from: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-11T05:39:07.588Z] Found TypeScript dependency at: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-11T05:39:07.588Z] Found comprehensive base TypeScript configuration at: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-11T05:39:07.588Z] Found common monorepo directory structure (packages) at: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-11T05:39:07.588Z] New best workspace candidate: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services (score: 100, type: unknown)
+[2026-07-11T05:39:07.589Z] Selected workspace root: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services (score: 100)
+[2026-07-11T05:39:07.589Z] No workspace configuration detected, using single-project mode: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-11T05:39:07.589Z] Starting TSServer manager with workspace: /Users/tapiwajoel/IdeaProjects/tapiwajoel/frontend-services
+[2026-07-11T05:39:07.589Z] TSServer Manager ready (using connection pool)

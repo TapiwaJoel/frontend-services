@@ -504,7 +504,7 @@ npx nx show project shell --web
 
 ## Adding New Remote Apps
 
-See the detailed guide in [docs/ADDING_REMOTE_APPS.md](docs/ADDING_REMOTE_APPS.md) for step-by-step instructions on adding new remote applications to the monorepo.
+See the detailed guide in [documentation/ADDING_REMOTE_APPS.md](documentation/ADDING_REMOTE_APPS.md) for step-by-step instructions on adding new remote applications to the monorepo.
 
 **Quick Overview:**
 
@@ -893,7 +893,7 @@ npx nx g @nx/angular:component my-comp      # Generate component
 ### Architecture & Patterns
 
 - [ARCHITECTURE.md](./ARCHITECTURE.md) - Detailed architecture documentation
-- [docs/ADDING_REMOTE_APPS.md](./docs/ADDING_REMOTE_APPS.md) - Guide for adding new remote apps
+- [documentation/ADDING_REMOTE_APPS.md](./documentation/ADDING_REMOTE_APPS.md) - Guide for adding new remote apps
 
 ### NX Documentation
 

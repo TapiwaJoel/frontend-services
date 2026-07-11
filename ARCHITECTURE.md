@@ -62,9 +62,11 @@ This architecture enforces a **single entry point** through the shell applicatio
 Each domain (umdzidzisi, umtengesi) contains three distinct application types, each serving a specific purpose:
 
 #### 1. Website Applications (Ports 4201, 4202)
+
 **Purpose**: Public-facing website applications
 
 **Characteristics**:
+
 - Customer-facing features and content
 - Marketing and landing pages
 - Public information and resources
@@ -73,6 +75,7 @@ Each domain (umdzidzisi, umtengesi) contains three distinct application types, e
 - Responsive design for all devices
 
 **Use Cases**:
+
 - Product catalogs
 - Company information
 - Blog and news articles
@@ -80,9 +83,11 @@ Each domain (umdzidzisi, umtengesi) contains three distinct application types, e
 - Public documentation
 
 #### 2. Admin Applications (Ports 4203, 4204)
+
 **Purpose**: Administrative portal applications
 
 **Characteristics**:
+
 - Internal management tools and interfaces
 - System configuration and settings
 - User and role management
@@ -91,6 +96,7 @@ Each domain (umdzidzisi, umtengesi) contains three distinct application types, e
 - Requires elevated permissions
 
 **Use Cases**:
+
 - System administration
 - User account management
 - Content publishing workflows
@@ -98,9 +104,11 @@ Each domain (umdzidzisi, umtengesi) contains three distinct application types, e
 - Configuration management
 
 #### 3. Client Applications (Ports 4205, 4206)
+
 **Purpose**: Client dashboard applications
 
 **Characteristics**:
+
 - Authenticated user dashboards
 - Personalized user experiences
 - Client-specific features and data
@@ -109,6 +117,7 @@ Each domain (umdzidzisi, umtengesi) contains three distinct application types, e
 - Role-based access control
 
 **Use Cases**:
+
 - User profile management
 - Personal dashboards
 - Account settings
@@ -177,6 +186,7 @@ Native Federation is a modern alternative to Webpack Module Federation that uses
 ### How It Works
 
 1. **Build Phase**:
+
    ```
    Remote Application Build
    ├── Generate application bundles
@@ -204,9 +214,9 @@ import { initFederation } from '@angular-architects/native-federation';
 
 // Initialize federation with manifest
 initFederation('federation.manifest.json')
-  .catch(err => console.error(err))
-  .then(_ => import('./bootstrap'))
-  .catch(err => console.error(err));
+  .catch((err) => console.error(err))
+  .then((_) => import('./bootstrap'))
+  .catch((err) => console.error(err));
 ```
 
 #### Federation Manifest (federation.manifest.json)
@@ -223,6 +233,7 @@ initFederation('federation.manifest.json')
 ```
 
 This manifest tells the shell where to find all 6 remote applications:
+
 - **Development**: Points to localhost with dedicated ports (4201-4206)
 - **Production**: Points to actual deployed URLs
 - **Naming Convention**: `{domain}-{type}` format for clear identification
@@ -237,26 +248,17 @@ export const appRoutes: Routes = [
   {
     path: 'umdzidzisi/website',
     canActivate: [authGuard],
-    loadChildren: () =>
-      loadRemoteModule('umdzidzisi-website', './Component').then((m) => [
-        { path: '', component: m.default },
-      ]),
+    loadChildren: () => loadRemoteModule('umdzidzisi-website', './Component').then((m) => [{ path: '', component: m.default }]),
   },
   {
     path: 'umdzidzisi/admin',
     canActivate: [authGuard],
-    loadChildren: () =>
-      loadRemoteModule('umdzidzisi-admin', './Component').then((m) => [
-        { path: '', component: m.default },
-      ]),
+    loadChildren: () => loadRemoteModule('umdzidzisi-admin', './Component').then((m) => [{ path: '', component: m.default }]),
   },
   {
     path: 'umdzidzisi/client',
     canActivate: [authGuard],
-    loadChildren: () =>
-      loadRemoteModule('umdzidzisi-client', './Component').then((m) => [
-        { path: '', component: m.default },
-      ]),
+    loadChildren: () => loadRemoteModule('umdzidzisi-client', './Component').then((m) => [{ path: '', component: m.default }]),
   },
   // Similar structure for umtengesi domain...
 ];
@@ -280,6 +282,7 @@ Remote applications expose components/modules via their project configuration:
 ```
 
 The Native Federation plugin automatically:
+
 - Exposes the root component as `./Component`
 - Creates a `remoteEntry.json` file
 - Configures shared dependencies
@@ -311,14 +314,7 @@ The shell's serve configuration includes a `dependsOn` array that automatically 
 {
   "serve": {
     "executor": "@angular-architects/native-federation:build",
-    "dependsOn": [
-      "umdzidzisi-website:build",
-      "umdzidzisi-admin:build",
-      "umdzidzisi-client:build",
-      "umtengesi-website:build",
-      "umtengesi-admin:build",
-      "umtengesi-client:build"
-    ],
+    "dependsOn": ["umdzidzisi-website:build", "umdzidzisi-admin:build", "umdzidzisi-client:build", "umtengesi-website:build", "umtengesi-admin:build", "umtengesi-client:build"],
     "options": {
       "target": "shell:serve-original:development"
     }
@@ -327,6 +323,7 @@ The shell's serve configuration includes a `dependsOn` array that automatically 
 ```
 
 **Important Notes:**
+
 - The shell runs on port 4200 (configured in `serve-original` target)
 - Each remote app has a dedicated port (4201-4206)
 - Remote apps do NOT have their own serve targets
@@ -368,6 +365,7 @@ apps/
 ```
 
 Each remote application's main.ts:
+
 ```typescript
 // This is a pure remote module - no standalone bootstrap
 // The shell application handles initialization and loading
@@ -375,6 +373,7 @@ Each remote application's main.ts:
 ```
 
 Key differences from traditional applications:
+
 - **No `initFederation()` call**: Remote apps don't initialize federation
 - **No `bootstrapApplication()` call**: Remote apps don't bootstrap themselves
 - **No serve targets**: Remote apps cannot be started independently
@@ -424,19 +423,12 @@ availableApps: RemoteApp[] = [
 ```json
 {
   "serve": {
-    "dependsOn": [
-      "umdzidzisi-website:build",
-      "umdzidzisi-admin:build",
-      "umdzidzisi-client:build",
-      "umtengesi-website:build",
-      "umtengesi-admin:build",
-      "umtengesi-client:build"
-    ]
+    "dependsOn": ["umdzidzisi-website:build", "umdzidzisi-admin:build", "umdzidzisi-client:build", "umtengesi-website:build", "umtengesi-admin:build", "umtengesi-client:build"]
   }
 }
 ```
 
-3. **Add route configuration** (see `docs/ADDING_REMOTE_APPS.md` for details)
+3. **Add route configuration** (see `documentation/ADDING_REMOTE_APPS.md` for details)
 
 4. **Update federation manifest** with new remote's URL
 
@@ -454,6 +446,7 @@ Native Federation automatically shares common dependencies:
 ```
 
 **Singleton Behavior**: Shared dependencies are loaded once and reused across all applications, ensuring:
+
 - Smaller bundle sizes
 - Consistent versions
 - Shared service instances (for services marked with `providedIn: 'root'`)
@@ -474,7 +467,7 @@ Angular services with `providedIn: 'root'` become singletons when dependencies a
 
 ```typescript
 @Injectable({
-  providedIn: 'root'  // This makes it a singleton
+  providedIn: 'root', // This makes it a singleton
 })
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
@@ -514,15 +507,15 @@ All services in `libs/shared/` are designed as singletons:
 ```typescript
 // libs/shared/data-access-auth/src/lib/services/auth.service.ts
 @Injectable({ providedIn: 'root' })
-export class AuthService { }
+export class AuthService {}
 
 // libs/shared/util-event-bus/src/lib/event-bus.service.ts
 @Injectable({ providedIn: 'root' })
-export class EventBusService { }
+export class EventBusService {}
 
 // libs/shared/util-theming/src/lib/theme.service.ts
 @Injectable({ providedIn: 'root' })
-export class ThemeService { }
+export class ThemeService {}
 ```
 
 ## Event Bus Communication
@@ -559,14 +552,12 @@ export class EventBusService {
   emit(event: AppEvent): void {
     this.eventSubject.next({
       ...event,
-      timestamp: event.timestamp || Date.now()
+      timestamp: event.timestamp || Date.now(),
     });
   }
 
   on(eventType: string): Observable<AppEvent> {
-    return this.events$.pipe(
-      filter(event => event.type === eventType)
-    );
+    return this.events$.pipe(filter((event) => event.type === eventType));
   }
 }
 ```
@@ -575,10 +566,10 @@ export class EventBusService {
 
 ```typescript
 export interface AppEvent {
-  type: string;        // Event identifier
-  payload?: any;       // Event data
-  timestamp?: number;  // When event occurred
-  source?: string;     // Which app emitted it
+  type: string; // Event identifier
+  payload?: any; // Event data
+  timestamp?: number; // When event occurred
+  source?: string; // Which app emitted it
 }
 ```
 
@@ -630,7 +621,7 @@ export class DataFormComponent {
       this.eventBus.emit({
         type: 'DATA_UPDATED',
         payload: { entityId: data.id, entityType: 'item' },
-        source: 'umdzidzisi'
+        source: 'umdzidzisi',
       });
     });
   }
@@ -641,7 +632,7 @@ export class DataListComponent {
   private eventBus = inject(EventBusService);
 
   ngOnInit() {
-    this.eventBus.on('DATA_UPDATED').subscribe(event => {
+    this.eventBus.on('DATA_UPDATED').subscribe((event) => {
       if (event.payload.entityType === 'item') {
         this.refreshDataList();
       }
@@ -661,10 +652,10 @@ export const EventTypes = {
   USER_LOGGED_OUT: 'USER_LOGGED_OUT',
   DATA_UPDATED: 'DATA_UPDATED',
   THEME_CHANGED: 'THEME_CHANGED',
-  NOTIFICATION_SHOWN: 'NOTIFICATION_SHOWN'
+  NOTIFICATION_SHOWN: 'NOTIFICATION_SHOWN',
 } as const;
 
-export type EventType = typeof EventTypes[keyof typeof EventTypes];
+export type EventType = (typeof EventTypes)[keyof typeof EventTypes];
 ```
 
 ## Theming System
@@ -753,11 +744,11 @@ export const THEMES: Record<string, Theme> = {
       primary: '#667eea',
       secondary: '#764ba2',
       background: '#ffffff',
-      text: '#333333'
-    }
+      text: '#333333',
+    },
   },
-  umdzidzisi: { /* ... */ },
-  umtengesi: { /* ... */ }
+  umdzidzisi: {/* ... */},
+  umtengesi: {/* ... */},
 };
 ```
 
@@ -773,13 +764,13 @@ export const THEMES: Record<string, Theme> = {
   --text-color: #333333;
 }
 
-[data-theme="umdzidzisi"] {
+[data-theme='umdzidzisi'] {
   --primary-color: #667eea;
   --secondary-color: #764ba2;
   // ... other umdzidzisi colors
 }
 
-[data-theme="umtengesi"] {
+[data-theme='umtengesi'] {
   --primary-color: #3b82f6;
   --secondary-color: #8b5cf6;
   // ... other umtengesi colors
@@ -807,9 +798,7 @@ export class App implements OnInit {
     this.themeService.setThemeFromRoute(this.router.url);
 
     // Update theme on navigation
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: NavigationEnd) => {
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
       this.themeService.setThemeFromRoute(event.url);
     });
   }
@@ -884,11 +873,11 @@ export class App implements OnInit {
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
-  public isAuthenticated$ = this.currentUser$.pipe(map(user => !!user));
+  public isAuthenticated$ = this.currentUser$.pipe(map((user) => !!user));
 
   constructor(
     private http: HttpClient,
-    private tokenService: TokenService
+    private tokenService: TokenService,
   ) {
     this.initializeAuth();
   }
@@ -901,14 +890,13 @@ export class AuthService {
   }
 
   login(credentials: { email: string; password: string }): Observable<User> {
-    return this.http.post<{ user: User; token: string }>('/api/auth/login', credentials)
-      .pipe(
-        tap(response => {
-          this.tokenService.setToken(response.token);
-          this.currentUserSubject.next(response.user);
-        }),
-        map(response => response.user)
-      );
+    return this.http.post<{ user: User; token: string }>('/api/auth/login', credentials).pipe(
+      tap((response) => {
+        this.tokenService.setToken(response.token);
+        this.currentUserSubject.next(response.user);
+      }),
+      map((response) => response.user),
+    );
   }
 }
 ```
@@ -948,7 +936,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   }
 
   router.navigate(['/login'], {
-    queryParams: { returnUrl: state.url }
+    queryParams: { returnUrl: state.url },
   });
   return false;
 };
@@ -964,8 +952,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (token) {
     req = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
   }
 
@@ -975,7 +963,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         // Handle token refresh
       }
       return throwError(() => error);
-    })
+    }),
   );
 };
 ```
@@ -1159,12 +1147,14 @@ npx nx affected:graph
 ### 1. Library Organization
 
 **DO**:
+
 - Keep libraries small and focused
 - Use clear naming conventions: `{scope}/{type}-{name}`
 - Export only what's needed via index.ts
 - Document public APIs
 
 **DON'T**:
+
 - Create circular dependencies
 - Export internal implementation details
 - Mix concerns in a single library
@@ -1172,12 +1162,14 @@ npx nx affected:graph
 ### 2. Service Design
 
 **DO**:
+
 - Use `providedIn: 'root'` for singleton services
 - Keep services stateless when possible
 - Use RxJS for reactive state management
 - Document service lifetime and scope
 
 **DON'T**:
+
 - Create service instances in constructors
 - Store large amounts of data in memory
 - Create tight coupling between services
@@ -1185,12 +1177,14 @@ npx nx affected:graph
 ### 3. Component Communication
 
 **DO**:
+
 - Use event bus for cross-app communication
 - Use Angular services for same-app communication
 - Keep event payloads small and serializable
 - Document event types and payloads
 
 **DON'T**:
+
 - Pass large objects in events
 - Create circular event dependencies
 - Use events for synchronous operations
@@ -1198,12 +1192,14 @@ npx nx affected:graph
 ### 4. Performance
 
 **DO**:
+
 - Lazy load remote applications
 - Use OnPush change detection
 - Minimize bundle sizes
 - Cache HTTP responses
 
 **DON'T**:
+
 - Load all remotes at startup
 - Create memory leaks with subscriptions
 - Bundle large assets with code
@@ -1211,12 +1207,14 @@ npx nx affected:graph
 ### 5. Testing
 
 **DO**:
+
 - Write unit tests for business logic
 - Use E2E tests for critical user flows
 - Mock external dependencies
 - Test error scenarios
 
 **DON'T**:
+
 - Test implementation details
 - Skip error handling tests
 - Create brittle E2E tests
@@ -1224,12 +1222,14 @@ npx nx affected:graph
 ### 6. Module Federation
 
 **DO**:
+
 - Version your remote applications
 - Use semantic versioning
 - Test integration points
 - Monitor production loading
 
 **DON'T**:
+
 - Break API contracts without versioning
 - Deploy incompatible versions
 - Assume remotes are always available
@@ -1308,8 +1308,8 @@ loadRemoteModule('umdzidzisi', './Component').then(() => {
 ```typescript
 // Example: Safe remote loading with fallback
 loadRemoteModule('umdzidzisi', './Component')
-  .then(module => module.default)
-  .catch(error => {
+  .then((module) => module.default)
+  .catch((error) => {
     console.error('Failed to load remote:', error);
     return FallbackComponent; // Show error state
   });
@@ -1320,6 +1320,7 @@ loadRemoteModule('umdzidzisi', './Component')
 ## Summary
 
 This architecture provides:
+
 - **Scalability**: Easy to add new applications
 - **Independence**: Teams work autonomously
 - **Performance**: Optimized loading and caching
@@ -1327,5 +1328,6 @@ This architecture provides:
 - **Flexibility**: Technology choices per application
 
 For more information, see:
+
 - [README.md](./README.md) - Getting started guide
-- [docs/ADDING_REMOTE_APPS.md](./docs/ADDING_REMOTE_APPS.md) - Adding new applications
+- [documentation/ADDING_REMOTE_APPS.md](./documentation/ADDING_REMOTE_APPS.md) - Adding new applications
