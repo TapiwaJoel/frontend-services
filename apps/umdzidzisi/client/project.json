@@ -4,10 +4,7 @@
   "projectType": "application",
   "prefix": "org",
   "sourceRoot": "apps/umdzidzisi/client/src",
-  "tags": [
-    "scope:umdzidzisi",
-    "type:client"
-  ],
+  "tags": ["scope:umdzidzisi", "type:client"],
   "targets": {
     "build": {
       "executor": "@angular-architects/native-federation:build",
@@ -36,7 +33,17 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        "{workspaceRoot}/tools/eslint-rules/**/*",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     },
     "test": {
       "executor": "@angular/build:unit-test",
@@ -56,9 +63,7 @@
     },
     "esbuild": {
       "executor": "@angular/build:application",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/umdzidzisi/client",
@@ -71,12 +76,8 @@
             "input": "apps/umdzidzisi/client/public"
           }
         ],
-        "styles": [
-          "apps/umdzidzisi/client/src/styles.scss"
-        ],
-        "polyfills": [
-          "es-module-shims"
-        ]
+        "styles": ["apps/umdzidzisi/client/src/styles.scss"],
+        "polyfills": ["es-module-shims"]
       },
       "configurations": {
         "production": {

@@ -4,10 +4,7 @@
   "projectType": "application",
   "prefix": "org",
   "sourceRoot": "apps/umtengesi/admin/src",
-  "tags": [
-    "scope:umtengesi",
-    "type:admin"
-  ],
+  "tags": ["scope:umtengesi", "type:admin"],
   "targets": {
     "build": {
       "executor": "@angular-architects/native-federation:build",
@@ -52,13 +49,21 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        "{workspaceRoot}/tools/eslint-rules/**/*",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     },
     "esbuild": {
       "executor": "@angular/build:application",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/umtengesi/admin",
@@ -71,12 +76,8 @@
             "input": "apps/umtengesi/admin/public"
           }
         ],
-        "styles": [
-          "apps/umtengesi/admin/src/styles.scss"
-        ],
-        "polyfills": [
-          "es-module-shims"
-        ]
+        "styles": ["apps/umtengesi/admin/src/styles.scss"],
+        "polyfills": ["es-module-shims"]
       },
       "configurations": {
         "production": {

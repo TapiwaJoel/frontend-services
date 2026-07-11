@@ -4,13 +4,11 @@
   "projectType": "application",
   "prefix": "org",
   "sourceRoot": "apps/umdzidzisi/admin/src",
-  "tags": [
-    "scope:umdzidzisi",
-    "type:admin"
-  ],
+  "tags": ["scope:umdzidzisi", "type:admin"],
   "targets": {
     "build": {
       "executor": "@angular-architects/native-federation:build",
+      "defaultConfiguration": "production",
       "options": {
         "cacheExternalArtifacts": true
       },
@@ -22,8 +20,7 @@
           "target": "umdzidzisi-admin:esbuild:development",
           "dev": true
         }
-      },
-      "defaultConfiguration": "production"
+      }
     },
     "serve": {
       "executor": "@angular-architects/native-federation:build",
@@ -36,7 +33,17 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        "{workspaceRoot}/tools/eslint-rules/**/*",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     },
     "serve-static": {
       "continuous": true,
@@ -50,9 +57,7 @@
     },
     "esbuild": {
       "executor": "@angular/build:application",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/umdzidzisi/admin",
@@ -65,12 +70,8 @@
             "input": "apps/umdzidzisi/admin/public"
           }
         ],
-        "styles": [
-          "apps/umdzidzisi/admin/src/styles.scss"
-        ],
-        "polyfills": [
-          "es-module-shims"
-        ]
+        "styles": ["apps/umdzidzisi/admin/src/styles.scss"],
+        "polyfills": ["es-module-shims"]
       },
       "configurations": {
         "production": {

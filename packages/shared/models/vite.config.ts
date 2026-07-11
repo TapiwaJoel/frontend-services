@@ -1,10 +1,9 @@
 import { defineConfig } from 'vite';
-import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 
 export default defineConfig(() => ({
   root: __dirname,
   cacheDir: '../../../node_modules/.vite/packages/shared/models',
-  plugins: [nxCopyAssetsPlugin(['*.md'])],
+  plugins: [],
   resolve: {
     tsconfigPaths: true,
   },
