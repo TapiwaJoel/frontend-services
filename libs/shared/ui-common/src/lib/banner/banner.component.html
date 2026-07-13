@@ -1,12 +1,16 @@
-<div class="flex items-center justify-between py-3 px-6 mb-0 w-full text-white"
-     [ngClass]="{
-       'bg-success': banner.type === 'success',
-       'bg-error': banner.type === 'error',
-       'bg-warning': banner.type === 'warning',
-       'bg-info': banner.type === 'info'
-     }">
-  <div class="flex items-center gap-3 flex-1">
-    <span class="flex items-center justify-center w-5 h-5 rounded-full text-xs font-bold bg-white bg-opacity-20">
+<div
+  class="mb-0 flex w-full items-center justify-between px-6 py-3 text-white"
+  [ngClass]="{
+    'bg-success': banner.type === 'success',
+    'bg-error': banner.type === 'error',
+    'bg-warning': banner.type === 'warning',
+    'bg-info': banner.type === 'info',
+  }"
+>
+  <div class="flex flex-1 items-center gap-3">
+    <span
+      class="bg-opacity-20 flex h-5 w-5 items-center justify-center rounded-full bg-white text-xs font-bold"
+    >
       @switch (banner.type) {
         @case ('success') {
           <span>&#10003;</span>
@@ -26,10 +30,13 @@
   </div>
 
   @if (banner.actions && banner.actions.length > 0) {
-    <div class="flex gap-2 ml-4">
+    <div class="ml-4 flex gap-2">
       @for (action of banner.actions; track action.label) {
-        <button class="py-1.5 px-3 border border-white border-opacity-30 bg-white bg-opacity-10 rounded text-inherit text-xs cursor-pointer transition-colors duration-200 hover:bg-opacity-20"
-                (click)="onActionClick(action.handler)">
+        <button
+          type="button"
+          class="border-opacity-30 bg-opacity-10 hover:bg-opacity-20 cursor-pointer rounded border border-white bg-white px-3 py-1.5 text-xs text-inherit transition-colors duration-200"
+          (click)="onActionClick(action.handler)"
+        >
           {{ action.label }}
         </button>
       }
@@ -37,9 +44,12 @@
   }
 
   @if (banner.dismissible) {
-    <button class="bg-transparent border-0 text-2xl cursor-pointer p-0 w-6 h-6 flex items-center justify-center ml-4 text-inherit opacity-80 transition-opacity duration-200 hover:opacity-100"
-            (click)="onDismiss()"
-            aria-label="Dismiss banner">
+    <button
+      type="button"
+      class="ml-4 flex h-6 w-6 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-2xl text-inherit opacity-80 transition-opacity duration-200 hover:opacity-100"
+      (click)="onDismiss()"
+      aria-label="Dismiss banner"
+    >
       &times;
     </button>
   }

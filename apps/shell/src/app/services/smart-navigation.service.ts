@@ -3,34 +3,34 @@ import { Router } from '@angular/router';
 import { RemoteDetectionService } from './remote-detection.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SmartNavigationService {
-  private router = inject(Router);
-  private remoteDetection = inject(RemoteDetectionService);
+  private router: Router = inject(Router);
+  private remoteDetection: RemoteDetectionService = inject(
+    RemoteDetectionService,
+  );
 
   /**
    * Navigate intelligently after login based on available remotes
    */
-  async navigateAfterLogin(): Promise<void> {
+  public async navigateAfterLogin(): Promise<void> {
     try {
       // Check remotes sequentially and find the first available one
-      const firstAvailableRemote = await this.remoteDetection.checkRemotesSequentially();
-
-      console.log('First available remote:', firstAvailableRemote);
+      const firstAvailableRemote: string | null =
+        await this.remoteDetection.checkRemotesSequentially();
 
       if (!firstAvailableRemote) {
         // No remotes available - go to dashboard with error message
         console.warn('No remote applications are currently available');
         await this.router.navigate(['/dashboard'], {
-          queryParams: { error: 'no-remotes' }
+          queryParams: { error: 'no-remotes' },
         });
       } else {
         // Navigate to the first available remote
-        console.log(`Auto-navigating to ${firstAvailableRemote}`);
         await this.router.navigate([`/${firstAvailableRemote}`]);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error during smart navigation:', error);
       // Fallback to dashboard on error
       await this.router.navigate(['/dashboard']);
@@ -40,8 +40,9 @@ export class SmartNavigationService {
   /**
    * Navigate to a specific remote if it's available
    */
-  async navigateToRemote(remoteName: string): Promise<boolean> {
-    const available = await this.remoteDetection.checkRemoteAvailability(remoteName);
+  public async navigateToRemote(remoteName: string): Promise<boolean> {
+    const available: boolean =
+      await this.remoteDetection.checkRemoteAvailability(remoteName);
 
     if (available) {
       await this.router.navigate([`/${remoteName}`]);

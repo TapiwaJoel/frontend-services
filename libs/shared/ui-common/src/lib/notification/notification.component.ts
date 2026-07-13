@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Notification } from '../services/notification.service';
 
@@ -7,13 +13,14 @@ import { Notification } from '../services/notification.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.scss']
+  styleUrls: ['./notification.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationComponent {
-  @Input() notification!: Notification;
-  @Output() dismiss = new EventEmitter<string>();
+  @Input() public notification!: Notification;
+  @Output() public dismiss: EventEmitter<string> = new EventEmitter<string>();
 
-  onDismiss(): void {
+  public onDismiss(): void {
     this.dismiss.emit(this.notification.id);
   }
 }

@@ -3,8 +3,8 @@ import { inject } from '@angular/core';
 import { TokenService } from '../services/token.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const tokenService = inject(TokenService);
-  const token = tokenService.getToken();
+  const tokenService: TokenService = inject(TokenService);
+  const token: string | null = tokenService.getToken();
 
   // Skip adding token for auth-related requests
   if (req.url.includes('/auth/login') || req.url.includes('/auth/register')) {
@@ -13,10 +13,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   // Clone the request and add the authorization header if token exists
   if (token) {
-    const clonedRequest = req.clone({
+    const clonedRequest: typeof req = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return next(clonedRequest);
   }

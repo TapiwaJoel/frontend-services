@@ -6,18 +6,22 @@ export interface FederationManifest {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RemoteDetectionService {
-  private appConfig = inject(AppConfigService);
+  private appConfig: AppConfigService = inject(AppConfigService);
   private manifest: FederationManifest = {};
-  private availableRemotesSignal = signal<string[]>([]);
-  public availableRemotes = this.availableRemotesSignal.asReadonly();
-  private checkCache = new Map<string, { available: boolean; timestamp: number }>();
-  private readonly CACHE_DURATION = 30000; // 30 seconds
-  private readonly REQUEST_TIMEOUT = 5000; // 5 seconds
+  private availableRemotesSignal: ReturnType<typeof signal<string[]>> = signal<
+    string[]
+  >([]);
+  public availableRemotes: ReturnType<typeof signal<string[]>>['asReadonly'] =
+    this.availableRemotesSignal.asReadonly();
+  private checkCache: Map<string, { available: boolean; timestamp: number }> =
+    new Map<string, { available: boolean; timestamp: number }>();
+  private readonly CACHE_DURATION: number = 30000; // 30 seconds
+  private readonly REQUEST_TIMEOUT: number = 5000; // 5 seconds
 
-  constructor() {
+  public constructor() {
     // Use environment-based remote configuration via AppConfigService
     // Development: localhost URLs with ports
     // Production: relative paths for deployment
@@ -28,32 +32,33 @@ export class RemoteDetectionService {
   /**
    * Check if a single remote is available
    */
-  async checkRemoteAvailability(remoteName: string): Promise<boolean> {
+  public async checkRemoteAvailability(remoteName: string): Promise<boolean> {
     // Check cache first
-    const cached = this.checkCache.get(remoteName);
-    if (cached && (Date.now() - cached.timestamp) < this.CACHE_DURATION) {
+    const cached: { available: boolean; timestamp: number } | undefined =
+      this.checkCache.get(remoteName);
+    if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {
       return cached.available;
     }
 
-    const manifestUrl = this.manifest[remoteName];
+    const manifestUrl: string | undefined = this.manifest[remoteName];
     if (!manifestUrl) {
       return false;
     }
 
     try {
       // Attempt to fetch the remoteEntry.json file
-      const response = await fetch(manifestUrl, {
+      const response: Response = await fetch(manifestUrl, {
         method: 'HEAD',
         mode: 'cors',
-        signal: AbortSignal.timeout(this.REQUEST_TIMEOUT)
+        signal: AbortSignal.timeout(this.REQUEST_TIMEOUT),
       });
 
-      const available = response.ok;
+      const available: boolean = response.ok;
 
       // Cache the result
       this.checkCache.set(remoteName, {
         available,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
 
       return available;
@@ -61,7 +66,7 @@ export class RemoteDetectionService {
       // If fetch fails, remote is not available
       this.checkCache.set(remoteName, {
         available: false,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
       return false;
     }
@@ -70,22 +75,23 @@ export class RemoteDetectionService {
   /**
    * Check all remotes and update the available remotes list
    */
-  async checkAllRemotes(): Promise<Map<string, boolean>> {
-    const remoteNames = Object.keys(this.manifest);
-    const results = new Map<string, boolean>();
+  public async checkAllRemotes(): Promise<Map<string, boolean>> {
+    const remoteNames: string[] = Object.keys(this.manifest);
+    const results: Map<string, boolean> = new Map<string, boolean>();
 
-    const checks = remoteNames.map(async (name) => {
-      const available = await this.checkRemoteAvailability(name);
-      results.set(name, available);
-      return { name, available };
-    });
+    const checks: Promise<{ name: string; available: boolean }>[] =
+      remoteNames.map(async (name: string) => {
+        const available: boolean = await this.checkRemoteAvailability(name);
+        results.set(name, available);
+        return { name, available };
+      });
 
     await Promise.all(checks);
 
     // Update the available remotes list
-    const availableNames = Array.from(results.entries())
-      .filter(([, available]) => available)
-      .map(([name]) => name);
+    const availableNames: string[] = Array.from(results.entries())
+      .filter(([, available]: [string, boolean]) => available)
+      .map(([name]: [string, boolean]) => name);
 
     this.availableRemotesSignal.set(availableNames);
 
@@ -96,12 +102,12 @@ export class RemoteDetectionService {
    * Check remotes sequentially and return the first available one
    * This reduces connection errors by stopping as soon as we find an available remote
    */
-  async checkRemotesSequentially(): Promise<string | null> {
-    const remoteNames = Object.keys(this.manifest);
+  public async checkRemotesSequentially(): Promise<string | null> {
+    const remoteNames: string[] = Object.keys(this.manifest);
     const availableRemotes: string[] = [];
 
     for (const name of remoteNames) {
-      const available = await this.checkRemoteAvailability(name);
+      const available: boolean = await this.checkRemoteAvailability(name);
       if (available) {
         availableRemotes.push(name);
         // Update the signal with what we found so far
@@ -119,14 +125,14 @@ export class RemoteDetectionService {
   /**
    * Get available remotes synchronously (from last check)
    */
-  getAvailableRemotesSync(): string[] {
+  public getAvailableRemotesSync(): string[] {
     return this.availableRemotesSignal();
   }
 
   /**
    * Clear the cache and re-check all remotes
    */
-  async refreshAvailability(): Promise<void> {
+  public async refreshAvailability(): Promise<void> {
     this.checkCache.clear();
     await this.checkAllRemotes();
   }
@@ -134,7 +140,7 @@ export class RemoteDetectionService {
   /**
    * Get all configured remotes (regardless of availability)
    */
-  getAllConfiguredRemotes(): string[] {
+  public getAllConfiguredRemotes(): string[] {
     return Object.keys(this.manifest);
   }
 }

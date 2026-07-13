@@ -14,27 +14,30 @@ export interface Banner {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BannerService {
-  private bannersSignal = signal<Banner[]>([]);
-  public banners = this.bannersSignal.asReadonly();
+  private bannersSignal: ReturnType<typeof signal<Banner[]>> = signal<Banner[]>(
+    [],
+  );
+  public banners: ReturnType<typeof signal<Banner[]>>['asReadonly'] =
+    this.bannersSignal.asReadonly();
 
-  show(banner: Omit<Banner, 'id'>): void {
-    const id = this.generateId();
+  public show(banner: Omit<Banner, 'id'>): void {
+    const id: string = this.generateId();
     const newBanner: Banner = { id, ...banner };
 
-    const currentBanners = this.bannersSignal();
+    const currentBanners: Banner[] = this.bannersSignal();
     this.bannersSignal.set([...currentBanners, newBanner]);
   }
 
-  dismiss(id: string): void {
-    this.bannersSignal.update(banners =>
-      banners.filter(banner => banner.id !== id)
+  public dismiss(id: string): void {
+    this.bannersSignal.update((banners: Banner[]) =>
+      banners.filter((banner: Banner) => banner.id !== id),
     );
   }
 
-  clear(): void {
+  public clear(): void {
     this.bannersSignal.set([]);
   }
 

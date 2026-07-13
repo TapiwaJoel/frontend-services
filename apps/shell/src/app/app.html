@@ -1,15 +1,1 @@
-<org-shell-layout [user]="user()" [theme]="currentTheme() || 'default'">
-  <div slot="notifications">
-    <org-notification-container></org-notification-container>
-  </div>
-
-  <div slot="banners">
-    <org-banner-container></org-banner-container>
-  </div>
-
-  <div slot="header-actions">
-    <org-user-menu [user]="user()"></org-user-menu>
-  </div>
-
-  <router-outlet></router-outlet>
-</org-shell-layout>
+<router-outlet />

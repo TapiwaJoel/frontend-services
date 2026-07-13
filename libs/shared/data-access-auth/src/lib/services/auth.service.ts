@@ -10,23 +10,27 @@ import { TokenService } from './token.service';
  * Perfect for development and testing.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  private tokenService = inject(TokenService);
+  private tokenService: TokenService = inject(TokenService);
 
-  private readonly currentUserSignal = signal<User | null>(null);
+  private readonly currentUserSignal: ReturnType<typeof signal<User | null>> =
+    signal<User | null>(null);
 
-  public readonly currentUser = this.currentUserSignal.asReadonly();
+  public readonly currentUser: ReturnType<
+    typeof signal<User | null>
+  >['asReadonly'] = this.currentUserSignal.asReadonly();
 
-  public readonly isAuthenticated = computed(() => !!this.currentUserSignal());
+  public readonly isAuthenticated: ReturnType<typeof computed<boolean>> =
+    computed(() => !!this.currentUserSignal());
 
-  constructor() {
+  public constructor() {
     this.initializeAuth();
   }
 
   private initializeAuth(): void {
-    const token = this.tokenService.getToken();
+    const token: string | null = this.tokenService.getToken();
     if (token) {
       // Load mock user from stored token
       this.checkAuth().subscribe();
@@ -37,27 +41,34 @@ export class AuthService {
    * Mock login - accepts any credentials and logs in successfully
    * No API calls are made
    */
-  login(credentials: { email: string; password: string }): Observable<User> {
+  public login(credentials: {
+    email: string;
+    password: string;
+  }): Observable<User> {
     // Create a mock user based on the credentials
     const mockUser: User = {
       id: '1',
       email: credentials.email,
-      name: credentials.email.split('@')[0] || 'User'
+      name: credentials.email.split('@')[0] || 'User',
     };
 
     // Create mock tokens
-    const mockToken = 'mock-jwt-token-' + Date.now();
-    const mockRefreshToken = 'mock-refresh-token-' + Date.now();
+    const mockToken: string = 'mock-jwt-token-' + Date.now();
+    const mockRefreshToken: string = 'mock-refresh-token-' + Date.now();
 
     // Simulate API delay
-    return of({ user: mockUser, token: mockToken, refreshToken: mockRefreshToken }).pipe(
+    return of({
+      user: mockUser,
+      token: mockToken,
+      refreshToken: mockRefreshToken,
+    }).pipe(
       delay(300), // Simulate network delay
-      tap(response => {
+      tap((response) => {
         this.tokenService.setToken(response.token);
         this.tokenService.setRefreshToken(response.refreshToken);
         this.currentUserSignal.set(response.user);
       }),
-      map(response => response.user)
+      map((response) => response.user),
     );
   }
 
@@ -65,13 +76,13 @@ export class AuthService {
    * Mock logout - clears local state
    * No API calls are made
    */
-  logout(): Observable<void> {
+  public logout(): Observable<void> {
     return of(void 0).pipe(
       delay(100),
       tap(() => {
         this.tokenService.clearTokens();
         this.currentUserSignal.set(null);
-      })
+      }),
     );
   }
 
@@ -79,17 +90,18 @@ export class AuthService {
    * Mock token refresh
    * No API calls are made
    */
-  refreshToken(): Observable<string> {
-    const mockToken = 'mock-jwt-token-refreshed-' + Date.now();
-    const mockRefreshToken = 'mock-refresh-token-refreshed-' + Date.now();
+  public refreshToken(): Observable<string> {
+    const mockToken: string = 'mock-jwt-token-refreshed-' + Date.now();
+    const mockRefreshToken: string =
+      'mock-refresh-token-refreshed-' + Date.now();
 
     return of({ token: mockToken, refreshToken: mockRefreshToken }).pipe(
       delay(200),
-      tap(response => {
+      tap((response) => {
         this.tokenService.setToken(response.token);
         this.tokenService.setRefreshToken(response.refreshToken);
       }),
-      map(response => response.token)
+      map((response) => response.token),
     );
   }
 
@@ -97,8 +109,8 @@ export class AuthService {
    * Mock auth check - returns stored user
    * No API calls are made
    */
-  checkAuth(): Observable<boolean> {
-    const token = this.tokenService.getToken();
+  public checkAuth(): Observable<boolean> {
+    const token: string | null = this.tokenService.getToken();
 
     if (!token) {
       return of(false);
@@ -108,23 +120,23 @@ export class AuthService {
     const mockUser: User = {
       id: '1',
       email: 'user@example.com',
-      name: 'Mock User'
+      name: 'Mock User',
     };
 
     return of({ user: mockUser }).pipe(
       delay(100),
-      tap(response => {
+      tap((response) => {
         this.currentUserSignal.set(response.user);
       }),
-      map(() => true)
+      map(() => true),
     );
   }
 
-  getCurrentUser(): User | null {
+  public getCurrentUser(): User | null {
     return this.currentUserSignal();
   }
 
-  isAuthenticatedValue(): boolean {
+  public isAuthenticatedValue(): boolean {
     return !!this.currentUserSignal();
   }
 }

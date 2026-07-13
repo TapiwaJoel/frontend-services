@@ -1,35 +1,31 @@
-import { Component, inject } from '@angular/core';
+import {
+  Component,
+  inject,
+  ChangeDetectionStrategy,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BannerService } from '../services/banner.service';
+import { BannerService, Banner } from '../services/banner.service';
 import { BannerComponent } from './banner.component';
 
 @Component({
   selector: 'org-banner-container',
   standalone: true,
   imports: [CommonModule, BannerComponent],
-  template: `
-    <div class="banner-container">
-      @for (banner of banners(); track banner.id) {
-        <org-banner
-          [banner]="banner"
-          (dismiss)="onDismiss($event)">
-        </org-banner>
-      }
-    </div>
-  `,
-  styles: [`
-    .banner-container {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-    }
-  `]
+  templateUrl: './banner-container.component.html',
+  styleUrl: './banner-container.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BannerContainerComponent {
-  private bannerService = inject(BannerService);
-  banners = this.bannerService.banners;
+  private bannerService: BannerService = inject(BannerService);
+  public banners: ReturnType<typeof signal>['asReadonly'] =
+    this.bannerService.banners;
 
-  onDismiss(id: string): void {
+  public get bannersList(): Banner[] {
+    return this.banners();
+  }
+
+  public onDismiss(id: string): void {
     this.bannerService.dismiss(id);
   }
 }

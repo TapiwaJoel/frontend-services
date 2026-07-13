@@ -11,4 +11,4 @@ export * from './lib/banner/banner-container.component';
 export * from './lib/user-menu/user-menu.component';
 
 // Legacy export
-export * from './lib/ui-common/ui-common';
+export { UiCommonComponent } from './lib/ui-common/ui-common';

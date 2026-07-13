@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Banner } from '../services/banner.service';
 
@@ -7,17 +13,18 @@ import { Banner } from '../services/banner.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './banner.component.html',
-  styleUrls: ['./banner.component.scss']
+  styleUrls: ['./banner.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BannerComponent {
-  @Input() banner!: Banner;
-  @Output() dismiss = new EventEmitter<string>();
+  @Input() public banner!: Banner;
+  @Output() public dismiss: EventEmitter<string> = new EventEmitter<string>();
 
-  onDismiss(): void {
+  public onDismiss(): void {
     this.dismiss.emit(this.banner.id);
   }
 
-  onActionClick(handler: () => void): void {
+  public onActionClick(handler: () => void): void {
     handler();
   }
 }

@@ -13,7 +13,7 @@ export interface RemoteConfig {
 export type RemoteConfiguration = Record<string, RemoteConfig | string>;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AppConfigService {
   private remotes: RemoteConfiguration = environment.remotes;
@@ -23,8 +23,8 @@ export class AppConfigService {
    * @param remoteName The name of the remote app (e.g., 'umdzidzisi-website')
    * @returns The auth mode: 'none', 'optional', or 'required'
    */
-  getAuthMode(remoteName: string): AuthMode {
-    const config = this.remotes[remoteName];
+  public getAuthMode(remoteName: string): AuthMode {
+    const config: RemoteConfig | string = this.remotes[remoteName];
 
     // Handle legacy string format (backward compatibility)
     if (typeof config === 'string') {
@@ -41,8 +41,8 @@ export class AppConfigService {
    * @param remoteName The name of the remote app
    * @returns The remote entry URL
    */
-  getRemoteUrl(remoteName: string): string {
-    const config = this.remotes[remoteName];
+  public getRemoteUrl(remoteName: string): string {
+    const config: RemoteConfig | string = this.remotes[remoteName];
 
     // Handle both string and object formats
     if (typeof config === 'string') {
@@ -56,7 +56,7 @@ export class AppConfigService {
    * Get all remote URLs in the format needed for initFederation()
    * @returns Record of remote names to URLs
    */
-  getRemoteUrls(): Record<string, string> {
+  public getRemoteUrls(): Record<string, string> {
     const urls: Record<string, string> = {};
 
     Object.entries(this.remotes).forEach(([name, config]) => {
@@ -70,7 +70,7 @@ export class AppConfigService {
    * Get all configured remote names
    * @returns Array of remote names
    */
-  getAllRemoteNames(): string[] {
+  public getAllRemoteNames(): string[] {
     return Object.keys(this.remotes);
   }
 
@@ -79,7 +79,7 @@ export class AppConfigService {
    * @param remoteName The name of the remote app
    * @returns True if the remote is configured
    */
-  hasRemote(remoteName: string): boolean {
+  public hasRemote(remoteName: string): boolean {
     return remoteName in this.remotes;
   }
 }

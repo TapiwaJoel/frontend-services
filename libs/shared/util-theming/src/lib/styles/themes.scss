@@ -15,13 +15,53 @@
 }
 
 [data-theme='umdzidzisi'] {
-  --theme-primary-color: #e91e63;
-  --theme-accent-color: #9c27b0;
-  --theme-background-color: #fafafa;
-  --theme-text-color: #212121;
-  --theme-text-secondary: #757575;
-  --theme-border-color: #e0e0e0;
-  --theme-shadow: rgba(233, 30, 99, 0.1);
+  /* Corporate Light Theme - Professional Purple Palette */
+  --theme-primary-color: #544a88;
+  --theme-accent-color: #756d9e;
+  --theme-background-color: #ffffff;
+  --theme-surface-color: #fafafa;
+  --theme-text-color: #0b0a14;
+  --theme-text-secondary: #544a88;
+  --theme-border-color: #d7d6e0;
+  --theme-hover-color: #3a3166;
+  --theme-shadow: rgba(84, 74, 136, 0.08);
+
+  /* Extended color scale for flexibility */
+  --umdzidzisi-50: #faf9fb;
+  --umdzidzisi-100: #d7d6e0;
+  --umdzidzisi-200: #b8b5ca;
+  --umdzidzisi-300: #9891b4;
+  --umdzidzisi-400: #756d9e;
+  --umdzidzisi-500: #544a88;
+  --umdzidzisi-600: #3a3166;
+  --umdzidzisi-700: #282148;
+  --umdzidzisi-800: #19162c;
+  --umdzidzisi-900: #0b0a14;
+}
+
+[data-theme='umdzidzisi-dark'] {
+  /* Corporate Dark Theme - Professional Purple Palette */
+  --theme-primary-color: #9891b4;
+  --theme-accent-color: #b8b5ca;
+  --theme-background-color: #0b0a14;
+  --theme-surface-color: #19162c;
+  --theme-text-color: #ffffff;
+  --theme-text-secondary: #b8b5ca;
+  --theme-border-color: #282148;
+  --theme-hover-color: #9891b4;
+  --theme-shadow: rgba(152, 145, 180, 0.15);
+
+  /* Extended color scale (same values, different context) */
+  --umdzidzisi-50: #faf9fb;
+  --umdzidzisi-100: #d7d6e0;
+  --umdzidzisi-200: #b8b5ca;
+  --umdzidzisi-300: #9891b4;
+  --umdzidzisi-400: #756d9e;
+  --umdzidzisi-500: #544a88;
+  --umdzidzisi-600: #3a3166;
+  --umdzidzisi-700: #282148;
+  --umdzidzisi-800: #19162c;
+  --umdzidzisi-900: #0b0a14;
 }
 
 [data-theme='umtengesi'] {

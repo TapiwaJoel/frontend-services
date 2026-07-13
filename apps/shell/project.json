@@ -31,6 +31,14 @@
         "dev": true,
         "devServer": true,
         "port": 4200
+      },
+      "configurations": {
+        "umdzidzisi": {
+          "target": "shell:serve-original:umdzidzisi"
+        },
+        "umtengesi": {
+          "target": "shell:serve-original:umtengesi"
+        }
       }
     },
     "lint": {
@@ -100,6 +108,28 @@
           "optimization": false,
           "extractLicenses": false,
           "sourceMap": true
+        },
+        "umdzidzisi": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/shell/src/environments/environment.ts",
+              "with": "apps/shell/src/environments/environment.umdzidzisi.ts"
+            }
+          ]
+        },
+        "umtengesi": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/shell/src/environments/environment.ts",
+              "with": "apps/shell/src/environments/environment.umtengesi.ts"
+            }
+          ]
         }
       }
     },
@@ -116,6 +146,12 @@
         },
         "development": {
           "buildTarget": "shell:esbuild:development"
+        },
+        "umdzidzisi": {
+          "buildTarget": "shell:esbuild:umdzidzisi"
+        },
+        "umtengesi": {
+          "buildTarget": "shell:esbuild:umtengesi"
         }
       }
     }

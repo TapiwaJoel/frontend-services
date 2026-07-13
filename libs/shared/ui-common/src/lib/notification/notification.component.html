@@ -1,18 +1,22 @@
-<div class="flex items-center justify-between p-3 mb-2 rounded bg-white shadow-notification animate-slide-in"
-     [ngClass]="{
-       'border-l-4 border-success': notification.type === 'success',
-       'border-l-4 border-error': notification.type === 'error',
-       'border-l-4 border-warning': notification.type === 'warning',
-       'border-l-4 border-info': notification.type === 'info'
-     }">
-  <div class="flex items-center gap-3 flex-1">
-    <span class="flex items-center justify-center w-6 h-6 rounded-full text-sm font-bold"
-          [ngClass]="{
-            'bg-success-light text-success': notification.type === 'success',
-            'bg-error-light text-error': notification.type === 'error',
-            'bg-warning-light text-warning': notification.type === 'warning',
-            'bg-info-light text-info': notification.type === 'info'
-          }">
+<div
+  class="shadow-notification animate-slide-in mb-2 flex items-center justify-between rounded bg-white p-3"
+  [ngClass]="{
+    'border-success border-l-4': notification.type === 'success',
+    'border-error border-l-4': notification.type === 'error',
+    'border-warning border-l-4': notification.type === 'warning',
+    'border-info border-l-4': notification.type === 'info',
+  }"
+>
+  <div class="flex flex-1 items-center gap-3">
+    <span
+      class="flex h-6 w-6 items-center justify-center rounded-full text-sm font-bold"
+      [ngClass]="{
+        'bg-success-light text-success': notification.type === 'success',
+        'bg-error-light text-error': notification.type === 'error',
+        'bg-warning-light text-warning': notification.type === 'warning',
+        'bg-info-light text-info': notification.type === 'info',
+      }"
+    >
       @switch (notification.type) {
         @case ('success') {
           <span>&#10003;</span>
@@ -28,11 +32,16 @@
         }
       }
     </span>
-    <span class="flex-1 text-sm leading-relaxed">{{ notification.message }}</span>
+    <span class="flex-1 text-sm leading-relaxed">{{
+      notification.message
+    }}</span>
   </div>
-  <button class="bg-transparent border-0 text-2xl cursor-pointer p-0 w-6 h-6 flex items-center justify-center text-gray-600 hover:text-gray-800 transition-colors duration-200"
-          (click)="onDismiss()"
-          aria-label="Dismiss notification">
+  <button
+    type="button"
+    class="flex h-6 w-6 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-2xl text-gray-600 transition-colors duration-200 hover:text-gray-800"
+    (click)="onDismiss()"
+    aria-label="Dismiss notification"
+  >
     &times;
   </button>
 </div>

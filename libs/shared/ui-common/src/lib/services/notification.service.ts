@@ -8,33 +8,38 @@ export interface Notification {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NotificationService {
-  private notificationsSignal = signal<Notification[]>([]);
-  public notifications = this.notificationsSignal.asReadonly();
+  private notificationsSignal: ReturnType<typeof signal<Notification[]>> =
+    signal<Notification[]>([]);
+  public notifications: ReturnType<
+    typeof signal<Notification[]>
+  >['asReadonly'] = this.notificationsSignal.asReadonly();
 
-  show(notification: Omit<Notification, 'id'>): void {
-    const id = this.generateId();
+  public show(notification: Omit<Notification, 'id'>): void {
+    const id: string = this.generateId();
     const newNotification: Notification = { id, ...notification };
 
-    const currentNotifications = this.notificationsSignal();
+    const currentNotifications: Notification[] = this.notificationsSignal();
     this.notificationsSignal.set([...currentNotifications, newNotification]);
 
     if (notification.duration) {
-      setTimeout(() => {
+      setTimeout((): void => {
         this.dismiss(id);
       }, notification.duration);
     }
   }
 
-  dismiss(id: string): void {
-    this.notificationsSignal.update(notifications =>
-      notifications.filter(notification => notification.id !== id)
+  public dismiss(id: string): void {
+    this.notificationsSignal.update((notifications: Notification[]) =>
+      notifications.filter(
+        (notification: Notification) => notification.id !== id,
+      ),
     );
   }
 
-  clear(): void {
+  public clear(): void {
     this.notificationsSignal.set([]);
   }
 

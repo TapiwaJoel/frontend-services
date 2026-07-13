@@ -1,4 +1,12 @@
 import nx from '@nx/eslint-plugin';
+import unusedImports from 'eslint-plugin-unused-imports';
+
+// Import custom rules
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const customRules = await import(join(__dirname, 'tools/eslint-rules/index.js'));
 
 export default [
   ...nx.configs['flat/base'],
@@ -13,6 +21,10 @@ export default [
   },
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+    plugins: {
+      'unused-imports': unusedImports,
+      'org': customRules.default,
+    },
     rules: {
       '@nx/enforce-module-boundaries': [
         'error',
@@ -55,6 +67,16 @@ export default [
           ],
         },
       ],
+      // Unused imports detection (from backend-services)
+      'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-vars': [
+        'error',
+        {
+          vars: 'all',
+          args: 'after-used',
+          ignoreRestSiblings: true,
+        },
+      ],
     },
   },
   {
@@ -68,7 +90,78 @@ export default [
       '**/*.cjs',
       '**/*.mjs',
     ],
-    // Override or add rules here
-    rules: {},
+    rules: {
+      // Console restrictions for production code (from backend-services)
+      'no-console': [
+        'warn',
+        {
+          allow: ['warn', 'error'],
+        },
+      ],
+    },
+  },
+  // TypeScript strict typing rules (from backend-services)
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: {
+      // Enforce explicit type annotations on variables, parameters, and properties
+      '@typescript-eslint/typedef': [
+        'error',
+        {
+          arrayDestructuring: false,       // Allow: const [a, b] = tuple
+          arrowParameter: false,           // Allow: arr.map(x => x * 2)
+          memberVariableDeclaration: true, // Require: property: Type
+          objectDestructuring: false,      // Allow: const { a, b } = obj
+          parameter: true,                 // Require: function(param: Type)
+          propertyDeclaration: true,       // Require: class property: Type
+          variableDeclaration: true,       // Require: const var: Type = value
+          variableDeclarationIgnoreFunction: false, // Enforce even for functions
+        },
+      ],
+      // Enforce explicit return types on functions and methods
+      '@typescript-eslint/explicit-function-return-type': [
+        'error',
+        {
+          allowExpressions: true,              // Allow: const x = () => 5
+          allowTypedFunctionExpressions: true, // Allow: const x: Fn = () => {}
+          allowHigherOrderFunctions: true,     // Allow: fn(x => x)
+          allowDirectConstAssertionInArrowFunctions: true,
+          allowConciseArrowFunctionExpressionsStartingWithVoid: true,
+        },
+      ],
+      // Enforce explicit return types on exported functions
+      '@typescript-eslint/explicit-module-boundary-types': [
+        'error',
+        {
+          allowArgumentsExplicitlyTypedAsAny: false,
+          allowDirectConstAssertionInArrowFunctions: true,
+          allowHigherOrderFunctions: true,
+          allowTypedFunctionExpressions: true,
+        },
+      ],
+      // Disable no-inferrable-types to avoid conflicts with typedef rule
+      '@typescript-eslint/no-inferrable-types': 'off',
+      // Enforce explicit access modifiers (public/private/protected) on class members
+      '@typescript-eslint/explicit-member-accessibility': [
+        'error',
+        {
+          accessibility: 'explicit', // Require explicit modifiers on ALL members
+        },
+      ],
+    },
+  },
+  // Test files - relax console restrictions
+  {
+    files: [
+      '**/*.spec.ts',
+      '**/*.spec.tsx',
+      '**/*.test.ts',
+      '**/*.test.tsx',
+      '**/e2e/**/*.ts',
+      '**/tests/**/*.ts',
+    ],
+    rules: {
+      'no-console': 'off',
+    },
   },
 ];

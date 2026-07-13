@@ -1,0 +1,8 @@
+<div class="notification-container">
+  @for (notification of notificationsList; track notification.id) {
+    <org-notification
+      [notification]="notification"
+      (dismiss)="onDismiss($event)"
+    />
+  }
+</div>

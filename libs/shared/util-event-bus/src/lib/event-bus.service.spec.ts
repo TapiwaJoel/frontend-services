@@ -19,10 +19,10 @@ describe('EventBusService', () => {
     const testEvent: AppEvent = {
       type: EventTypes.USER_LOGGED_IN,
       payload: { userId: '123' },
-      source: 'test'
+      source: 'test',
     };
 
-    service.events$.subscribe(event => {
+    service.events$.subscribe((event) => {
       expect(event.type).toBe(EventTypes.USER_LOGGED_IN);
       expect(event.payload).toEqual({ userId: '123' });
       expect(event.source).toBe('test');
@@ -36,15 +36,15 @@ describe('EventBusService', () => {
   it('should filter events by type', (done) => {
     const loginEvent: AppEvent = {
       type: EventTypes.USER_LOGGED_IN,
-      payload: { userId: '123' }
+      payload: { userId: '123' },
     };
 
     const logoutEvent: AppEvent = {
       type: EventTypes.USER_LOGGED_OUT,
-      payload: { userId: '123' }
+      payload: { userId: '123' },
     };
 
-    service.on(EventTypes.USER_LOGGED_IN).subscribe(event => {
+    service.on(EventTypes.USER_LOGGED_IN).subscribe((event) => {
       expect(event.type).toBe(EventTypes.USER_LOGGED_IN);
       expect(event.payload).toEqual({ userId: '123' });
       done();
@@ -57,10 +57,10 @@ describe('EventBusService', () => {
   it('should add timestamp if not provided', (done) => {
     const testEvent: AppEvent = {
       type: EventTypes.NOTIFICATION_SHOW,
-      payload: { message: 'Test notification' }
+      payload: { message: 'Test notification' },
     };
 
-    service.events$.subscribe(event => {
+    service.events$.subscribe((event) => {
       expect(event.timestamp).toBeDefined();
       expect(typeof event.timestamp).toBe('number');
       done();
@@ -70,14 +70,14 @@ describe('EventBusService', () => {
   });
 
   it('should preserve timestamp if provided', (done) => {
-    const customTimestamp = 1234567890;
+    const customTimestamp: number = 1234567890;
     const testEvent: AppEvent = {
       type: EventTypes.THEME_CHANGED,
       payload: { theme: 'dark' },
-      timestamp: customTimestamp
+      timestamp: customTimestamp,
     };
 
-    service.events$.subscribe(event => {
+    service.events$.subscribe((event) => {
       expect(event.timestamp).toBe(customTimestamp);
       done();
     });
@@ -86,8 +86,8 @@ describe('EventBusService', () => {
   });
 
   it('should be a singleton', () => {
-    const service1 = TestBed.inject(EventBusService);
-    const service2 = TestBed.inject(EventBusService);
+    const service1: EventBusService = TestBed.inject(EventBusService);
+    const service2: EventBusService = TestBed.inject(EventBusService);
     expect(service1).toBe(service2);
   });
 });

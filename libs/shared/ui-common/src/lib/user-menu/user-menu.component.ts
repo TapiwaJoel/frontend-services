@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface User {
@@ -13,37 +19,39 @@ export interface User {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './user-menu.component.html',
-  styleUrls: ['./user-menu.component.scss']
+  styleUrls: ['./user-menu.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserMenuComponent {
-  @Input() user: User | null = null;
-  @Output() logout = new EventEmitter<void>();
-  @Output() viewDevices = new EventEmitter<void>();
+  @Input() public user: User | null = null;
+  @Output() public logout: EventEmitter<void> = new EventEmitter<void>();
+  @Output() public viewDevices: EventEmitter<void> = new EventEmitter<void>();
 
-  isMenuOpen = false;
+  public isMenuOpen: boolean = false;
 
-  toggleMenu(): void {
+  public toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-  closeMenu(): void {
+  public closeMenu(): void {
     this.isMenuOpen = false;
   }
 
-  onLogout(): void {
+  public onLogout(): void {
     this.logout.emit();
     this.closeMenu();
   }
 
-  onViewDevices(): void {
+  public onViewDevices(): void {
     this.viewDevices.emit();
     this.closeMenu();
   }
 
-  getInitials(name: string): string {
-    return name
+  public get userInitials(): string {
+    if (!this.user) return '';
+    return this.user.name
       .split(' ')
-      .map(n => n[0])
+      .map((n: string) => n[0])
       .join('')
       .toUpperCase()
       .substring(0, 2);

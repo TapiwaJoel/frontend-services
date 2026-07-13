@@ -1,0 +1,5 @@
+<div class="banner-container">
+  @for (banner of bannersList; track banner.id) {
+    <org-banner [banner]="banner" (dismiss)="onDismiss($event)" />
+  }
+</div>

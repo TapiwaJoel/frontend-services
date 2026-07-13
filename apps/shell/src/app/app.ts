@@ -1,44 +1,40 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
-import { ShellLayoutComponent } from '@org/ui-common';
-import { NotificationContainerComponent } from '@org/ui-common';
-import { BannerContainerComponent } from '@org/ui-common';
-import { UserMenuComponent } from '@org/ui-common';
-import { AuthService } from '@org/data-access-auth';
-import { ThemeService } from '@org/util-theming';
+import { ThemeService, TitleService } from '@org/util-theming';
 
 @Component({
   selector: 'org-root',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    ShellLayoutComponent,
-    NotificationContainerComponent,
-    BannerContainerComponent,
-    UserMenuComponent
-  ],
+  imports: [CommonModule, RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class App implements OnInit {
-  private authService = inject(AuthService);
-  private themeService = inject(ThemeService);
-  private router = inject(Router);
+export class AppComponent implements OnInit {
+  private themeService: ThemeService = inject(ThemeService);
+  private titleService: TitleService = inject(TitleService);
+  private router: Router = inject(Router);
 
-  protected title = 'shell';
-
-  user = this.authService.currentUser;
-  currentTheme = this.themeService.currentTheme;
-
-  ngOnInit(): void {
+  public ngOnInit(): void {
     // Subscribe to router events to change theme based on route
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd,
+        ),
+      )
       .subscribe((event: NavigationEnd) => {
         this.themeService.setThemeFromRoute(event.url);
       });
+
+    // Set theme for initial route
+    this.themeService.setThemeFromRoute(this.router.url);
   }
 }

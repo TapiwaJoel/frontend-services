@@ -1,80 +1,14 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
   imports: [CommonModule, RouterModule],
   selector: 'org-root',
-  template: `
-    <div class="app-container">
-      <div class="app-header">
-        <h1>Umtengesi - Feature Module</h1>
-      </div>
-      <div class="app-content">
-        <p>This is the second remote application loaded via Module Federation.</p>
-        <div class="feature-list">
-          <h2>Capabilities</h2>
-          <ul>
-            <li>Micro-frontend architecture</li>
-            <li>Runtime integration</li>
-            <li>Version independence</li>
-            <li>Dynamic loading</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .app-container {
-      padding: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .app-header {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-      color: white;
-      padding: 2rem;
-      border-radius: 8px;
-      margin-bottom: 2rem;
-    }
-
-    .app-header h1 {
-      margin: 0;
-    }
-
-    .app-content {
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .app-content p {
-      color: #666;
-      font-size: 1.1rem;
-      margin-bottom: 2rem;
-    }
-
-    .feature-list h2 {
-      color: #333;
-      margin-bottom: 1rem;
-    }
-
-    .feature-list ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .feature-list li {
-      padding: 0.75rem;
-      margin-bottom: 0.5rem;
-      background: #f5f5f5;
-      border-left: 4px solid #f5576c;
-      border-radius: 4px;
-    }
-  `]
+  templateUrl: './app.html',
+  styleUrl: './app.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class App {
-  protected title = 'umtengesi';
+export default class AppComponent {
+  protected title: string = 'umtengesi';
 }

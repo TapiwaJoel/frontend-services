@@ -4,20 +4,20 @@ import { filter } from 'rxjs/operators';
 import { AppEvent } from './models/app-event.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EventBusService {
-  private eventSubject = new Subject<AppEvent>();
+  private eventSubject: Subject<AppEvent> = new Subject<AppEvent>();
   public events$: Observable<AppEvent> = this.eventSubject.asObservable();
 
   /**
    * Emits an event to all subscribers
    * @param event The event to emit
    */
-  emit(event: AppEvent): void {
+  public emit(event: AppEvent): void {
     const eventWithMetadata: AppEvent = {
       ...event,
-      timestamp: event.timestamp || Date.now()
+      timestamp: event.timestamp || Date.now(),
     };
     this.eventSubject.next(eventWithMetadata);
   }
@@ -27,9 +27,7 @@ export class EventBusService {
    * @param eventType The type of event to listen for
    * @returns Observable of events matching the specified type
    */
-  on(eventType: string): Observable<AppEvent> {
-    return this.events$.pipe(
-      filter(event => event.type === eventType)
-    );
+  public on(eventType: string): Observable<AppEvent> {
+    return this.events$.pipe(filter((event) => event.type === eventType));
   }
 }

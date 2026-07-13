@@ -1,71 +1,96 @@
-<div class="flex flex-col min-h-screen"
-     [attr.data-theme]="theme"
-     [ngClass]="{
-       'bg-gray-100': theme === 'light',
-       'bg-gray-900 text-gray-200': theme === 'dark'
-     }">
-  <header class="sticky top-0 z-[100] shadow-sm"
-          [ngClass]="{
-            'bg-white border-b border-gray-200': theme === 'light',
-            'bg-gray-800 border-b border-gray-700': theme === 'dark'
-          }">
-    <div class="flex items-center justify-between max-w-[1400px] mx-auto px-6 h-16 md:px-4">
-      <div>
-        <a routerLink="/" class="no-underline text-inherit">
-          <h1 class="m-0 text-2xl font-bold text-info">My App</h1>
-        </a>
+<div
+  class="flex min-h-screen flex-col"
+  [attr.data-theme]="theme"
+  [ngClass]="{
+    'bg-gray-100': theme === 'light',
+    'bg-gray-900 text-gray-200': theme === 'dark',
+  }"
+>
+  @if (showHeader) {
+    <header
+      class="sticky top-0 z-[100] shadow-sm"
+      [ngClass]="{
+        'border-b border-gray-200 bg-white': theme === 'light',
+        'border-b border-gray-700 bg-gray-800': theme === 'dark',
+      }"
+    >
+      <div
+        class="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-6 md:px-4"
+      >
+        <div>
+          <a routerLink="/" class="text-inherit no-underline">
+            <h1 class="text-info m-0 text-2xl font-bold">My App</h1>
+          </a>
+        </div>
+        <div class="flex items-center gap-4">
+          <ng-content select="[slot=header-actions]" />
+        </div>
       </div>
-      <div class="flex items-center gap-4">
-        <ng-content select="[slot=header-actions]"></ng-content>
-      </div>
-    </div>
-  </header>
+    </header>
+  }
 
   <div class="relative">
-    <ng-content select="[slot=notifications]"></ng-content>
+    <ng-content select="[slot=notifications]" />
   </div>
 
   <div class="relative">
-    <ng-content select="[slot=banners]"></ng-content>
+    <ng-content select="[slot=banners]" />
   </div>
 
-  <main class="flex-1 max-w-[1400px] w-full mx-auto p-6 md:p-4">
-    <ng-content></ng-content>
+  <main class="mx-auto w-full max-w-[1400px] flex-1 p-6 md:p-4">
+    <ng-content />
   </main>
 
-  <footer class="mt-auto"
+  @if (showFooter) {
+    <footer
+      class="mt-auto"
+      [ngClass]="{
+        'border-t border-gray-200 bg-white': theme === 'light',
+        'border-t border-gray-700 bg-gray-800': theme === 'dark',
+      }"
+    >
+      <div
+        class="mx-auto flex max-w-[1400px] items-center justify-between p-6 md:flex-col md:gap-4 md:p-4 md:text-center"
+      >
+        <div
+          class="text-sm"
           [ngClass]="{
-            'bg-white border-t border-gray-200': theme === 'light',
-            'bg-gray-800 border-t border-gray-700': theme === 'dark'
-          }">
-    <div class="flex items-center justify-between max-w-[1400px] mx-auto p-6 md:flex-col md:gap-4 md:p-4 md:text-center">
-      <div class="text-sm"
-           [ngClass]="{
-             'text-gray-600': theme === 'light',
-             'text-gray-400': theme === 'dark'
-           }">
-        &copy; {{ currentYear }} My App. All rights reserved.
+            'text-gray-600': theme === 'light',
+            'text-gray-400': theme === 'dark',
+          }"
+        >
+          &copy; {{ currentYear }} My App. All rights reserved.
+        </div>
+        <div class="flex gap-6 md:flex-col md:gap-3">
+          <a
+            href="/privacy"
+            class="text-sm no-underline transition-colors duration-200"
+            [ngClass]="{
+              'hover:text-info text-gray-600': theme === 'light',
+              'text-gray-400 hover:text-gray-200': theme === 'dark',
+            }"
+            >Privacy Policy</a
+          >
+          <a
+            href="/terms"
+            class="text-sm no-underline transition-colors duration-200"
+            [ngClass]="{
+              'hover:text-info text-gray-600': theme === 'light',
+              'text-gray-400 hover:text-gray-200': theme === 'dark',
+            }"
+            >Terms of Service</a
+          >
+          <a
+            href="/contact"
+            class="text-sm no-underline transition-colors duration-200"
+            [ngClass]="{
+              'hover:text-info text-gray-600': theme === 'light',
+              'text-gray-400 hover:text-gray-200': theme === 'dark',
+            }"
+            >Contact</a
+          >
+        </div>
       </div>
-      <div class="flex gap-6 md:flex-col md:gap-3">
-        <a href="/privacy"
-           class="text-sm no-underline transition-colors duration-200"
-           [ngClass]="{
-             'text-gray-600 hover:text-info': theme === 'light',
-             'text-gray-400 hover:text-gray-200': theme === 'dark'
-           }">Privacy Policy</a>
-        <a href="/terms"
-           class="text-sm no-underline transition-colors duration-200"
-           [ngClass]="{
-             'text-gray-600 hover:text-info': theme === 'light',
-             'text-gray-400 hover:text-gray-200': theme === 'dark'
-           }">Terms of Service</a>
-        <a href="/contact"
-           class="text-sm no-underline transition-colors duration-200"
-           [ngClass]="{
-             'text-gray-600 hover:text-info': theme === 'light',
-             'text-gray-400 hover:text-gray-200': theme === 'dark'
-           }">Contact</a>
-      </div>
-    </div>
-  </footer>
+    </footer>
+  }
 </div>

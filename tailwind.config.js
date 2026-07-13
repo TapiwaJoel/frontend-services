@@ -12,9 +12,11 @@ module.exports = {
           primary: 'var(--theme-primary-color)',
           accent: 'var(--theme-accent-color)',
           background: 'var(--theme-background-color)',
+          surface: 'var(--theme-surface-color)',
           text: 'var(--theme-text-color)',
           'text-secondary': 'var(--theme-text-secondary)',
           border: 'var(--theme-border-color)',
+          hover: 'var(--theme-hover-color)',
         },
         // Default theme colors
         default: {
@@ -25,14 +27,28 @@ module.exports = {
           'text-secondary': '#757575',
           border: '#e0e0e0',
         },
-        // Umdzidzisi brand colors
+        // Umdzidzisi brand colors - Corporate Purple Palette
         umdzidzisi: {
-          primary: '#e91e63',
-          accent: '#9c27b0',
-          background: '#fafafa',
-          text: '#212121',
-          'text-secondary': '#757575',
-          border: '#e0e0e0',
+          // Corporate light theme
+          primary: '#544a88',
+          accent: '#756d9e',
+          background: '#ffffff',
+          surface: '#fafafa',
+          text: '#0b0a14',
+          'text-secondary': '#544a88',
+          border: '#d7d6e0',
+          hover: '#3a3166',
+          // Complete color scale (50-900)
+          50: '#faf9fb',
+          100: '#d7d6e0',
+          200: '#b8b5ca',
+          300: '#9891b4',
+          400: '#756d9e',
+          500: '#544a88',
+          600: '#3a3166',
+          700: '#282148',
+          800: '#19162c',
+          900: '#0b0a14',
         },
         // Umtengesi brand colors
         umtengesi: {
@@ -80,13 +96,13 @@ module.exports = {
         },
       },
       boxShadow: {
-        'theme': '0 0 0 1px var(--theme-shadow)',
-        'notification': '0 2px 8px rgba(0, 0, 0, 0.15)',
+        theme: '0 0 0 1px var(--theme-shadow)',
+        notification: '0 2px 8px rgba(0, 0, 0, 0.15)',
         'card-hover': '0 12px 24px rgba(102, 126, 234, 0.15)',
       },
       animation: {
         'slide-in': 'slideIn 0.3s ease-out',
-        'spin': 'spin 0.8s linear infinite',
+        spin: 'spin 0.8s linear infinite',
         'dropdown-fade-in': 'dropdownFadeIn 0.2s ease-out',
       },
       keyframes: {
