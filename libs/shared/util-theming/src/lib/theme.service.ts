@@ -4,6 +4,7 @@ import {
   computed,
   inject,
   InjectionToken,
+  Signal,
 } from '@angular/core';
 import { THEMES } from './themes/theme-config';
 import { Theme } from './models/theme.model';
@@ -21,8 +22,7 @@ export class ThemeService {
   });
   private currentThemeSignal: ReturnType<typeof signal<string>> =
     signal<string>('default');
-  public currentTheme: ReturnType<typeof signal<string>>['asReadonly'] =
-    this.currentThemeSignal.asReadonly();
+  public currentTheme: Signal<string> = this.currentThemeSignal.asReadonly();
 
   // Computed signal that returns the full Theme object
   public currentThemeConfig: ReturnType<typeof computed<Theme>> =

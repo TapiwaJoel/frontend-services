@@ -2,7 +2,7 @@ import {
   Component,
   inject,
   ChangeDetectionStrategy,
-  signal,
+  Signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -22,7 +22,7 @@ import { NotificationComponent } from './notification.component';
 export class NotificationContainerComponent {
   private notificationService: NotificationService =
     inject(NotificationService);
-  public notifications: ReturnType<typeof signal>['asReadonly'] =
+  public notifications: Signal<Notification[]> =
     this.notificationService.notifications;
 
   public get notificationsList(): Notification[] {

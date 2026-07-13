@@ -1,4 +1,4 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { Injectable, signal, computed, inject, Signal } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { User } from '../models/user.model';
@@ -18,9 +18,8 @@ export class AuthService {
   private readonly currentUserSignal: ReturnType<typeof signal<User | null>> =
     signal<User | null>(null);
 
-  public readonly currentUser: ReturnType<
-    typeof signal<User | null>
-  >['asReadonly'] = this.currentUserSignal.asReadonly();
+  public readonly currentUser: Signal<User | null> =
+    this.currentUserSignal.asReadonly();
 
   public readonly isAuthenticated: ReturnType<typeof computed<boolean>> =
     computed(() => !!this.currentUserSignal());

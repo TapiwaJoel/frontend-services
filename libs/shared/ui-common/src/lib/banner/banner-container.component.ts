@@ -2,7 +2,7 @@ import {
   Component,
   inject,
   ChangeDetectionStrategy,
-  signal,
+  Signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BannerService, Banner } from '../services/banner.service';
@@ -18,8 +18,7 @@ import { BannerComponent } from './banner.component';
 })
 export class BannerContainerComponent {
   private bannerService: BannerService = inject(BannerService);
-  public banners: ReturnType<typeof signal>['asReadonly'] =
-    this.bannerService.banners;
+  public banners: Signal<Banner[]> = this.bannerService.banners;
 
   public get bannersList(): Banner[] {
     return this.banners();

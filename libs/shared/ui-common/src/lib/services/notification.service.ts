@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, Signal } from '@angular/core';
 
 export interface Notification {
   id: string;
@@ -13,9 +13,8 @@ export interface Notification {
 export class NotificationService {
   private notificationsSignal: ReturnType<typeof signal<Notification[]>> =
     signal<Notification[]>([]);
-  public notifications: ReturnType<
-    typeof signal<Notification[]>
-  >['asReadonly'] = this.notificationsSignal.asReadonly();
+  public notifications: Signal<Notification[]> =
+    this.notificationsSignal.asReadonly();
 
   public show(notification: Omit<Notification, 'id'>): void {
     const id: string = this.generateId();

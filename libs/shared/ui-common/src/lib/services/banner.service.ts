@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, Signal } from '@angular/core';
 
 export interface BannerAction {
   label: string;
@@ -20,8 +20,7 @@ export class BannerService {
   private bannersSignal: ReturnType<typeof signal<Banner[]>> = signal<Banner[]>(
     [],
   );
-  public banners: ReturnType<typeof signal<Banner[]>>['asReadonly'] =
-    this.bannersSignal.asReadonly();
+  public banners: Signal<Banner[]> = this.bannersSignal.asReadonly();
 
   public show(banner: Omit<Banner, 'id'>): void {
     const id: string = this.generateId();

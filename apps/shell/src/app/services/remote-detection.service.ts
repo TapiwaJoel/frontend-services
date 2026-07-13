@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject, signal, Signal } from '@angular/core';
 import { AppConfigService } from './app-config.service';
 
 export interface FederationManifest {
@@ -14,7 +14,7 @@ export class RemoteDetectionService {
   private availableRemotesSignal: ReturnType<typeof signal<string[]>> = signal<
     string[]
   >([]);
-  public availableRemotes: ReturnType<typeof signal<string[]>>['asReadonly'] =
+  public availableRemotes: Signal<string[]> =
     this.availableRemotesSignal.asReadonly();
   private checkCache: Map<string, { available: boolean; timestamp: number }> =
     new Map<string, { available: boolean; timestamp: number }>();
