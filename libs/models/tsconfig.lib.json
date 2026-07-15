@@ -2,27 +2,22 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "types": []
+    "declaration": true,
+    "types": ["node"]
   },
-  "include": [
-    "src/**/*.ts",
-    "../../libs/data-access-auth/src/index.ts",
-    "../../libs/ui-common/src/index.ts",
-    "../../libs/util-theming/src/index.ts"
-  ],
+  "include": ["src/**/*.ts"],
   "exclude": [
-    "src/**/*.spec.ts",
-    "src/**/*.test.ts",
     "vite.config.ts",
     "vite.config.mts",
     "vitest.config.ts",
     "vitest.config.mts",
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts",
     "src/**/*.test.tsx",
     "src/**/*.spec.tsx",
     "src/**/*.test.js",
     "src/**/*.spec.js",
     "src/**/*.test.jsx",
-    "src/**/*.spec.jsx",
-    "src/test-setup.ts"
+    "src/**/*.spec.jsx"
   ]
 }

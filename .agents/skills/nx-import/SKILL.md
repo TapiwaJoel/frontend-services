@@ -62,7 +62,7 @@ Before importing, identify whether the source is an **application** or a **libra
 
 `nx import` adds the imported directory itself (e.g. `apps`) to `pnpm-workspace.yaml`, **NOT** glob patterns for packages within it. Cross-package imports will fail with `Cannot find module`.
 
-**Fix**: Replace with proper globs from the source config (e.g. `apps/*`, `libs/shared/*`), then `pnpm install`.
+**Fix**: Replace with proper globs from the source config (e.g. `apps/*`, `libs/*`), then `pnpm install`.
 
 ### Root Dependencies and Config Not Imported (Critical)
 

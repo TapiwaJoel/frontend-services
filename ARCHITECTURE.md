@@ -502,18 +502,18 @@ Remote Umtengesi loads
 
 ### Verifying Singleton Behavior
 
-All services in `libs/shared/` are designed as singletons:
+All services in `libs/` are designed as singletons:
 
 ```typescript
-// libs/shared/data-access-auth/src/lib/services/auth.service.ts
+// libs/data-access-auth/src/lib/services/auth.service.ts
 @Injectable({ providedIn: 'root' })
 export class AuthService {}
 
-// libs/shared/util-event-bus/src/lib/event-bus.service.ts
+// libs/util-event-bus/src/lib/event-bus.service.ts
 @Injectable({ providedIn: 'root' })
 export class EventBusService {}
 
-// libs/shared/util-theming/src/lib/theme.service.ts
+// libs/util-theming/src/lib/theme.service.ts
 @Injectable({ providedIn: 'root' })
 export class ThemeService {}
 ```
@@ -646,7 +646,7 @@ export class DataListComponent {
 Define event types as constants for type safety:
 
 ```typescript
-// libs/shared/util-event-bus/src/lib/models/event-types.ts
+// libs/util-event-bus/src/lib/models/event-types.ts
 export const EventTypes = {
   USER_LOGGED_IN: 'USER_LOGGED_IN',
   USER_LOGGED_OUT: 'USER_LOGGED_OUT',
@@ -724,7 +724,7 @@ export class ThemeService {
 #### Theme Configuration
 
 ```typescript
-// libs/shared/util-theming/src/lib/themes/theme-config.ts
+// libs/util-theming/src/lib/themes/theme-config.ts
 export interface Theme {
   name: string;
   displayName: string;
