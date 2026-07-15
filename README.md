@@ -517,7 +517,7 @@ See the detailed guide in [documentation/ADDING_REMOTE_APPS.md](documentation/AD
 
 ## Shared Libraries
 
-### @org/data-access-auth
+### @mushaviri/data-access-auth
 
 **Purpose**: Centralized authentication logic
 
@@ -534,7 +534,7 @@ See the detailed guide in [documentation/ADDING_REMOTE_APPS.md](documentation/AD
 
 ```typescript
 import { inject } from '@angular/core';
-import { AuthService, authGuard } from '@org/data-access-auth';
+import { AuthService, authGuard } from '@mushaviri/data-access-auth';
 
 // In routes
 export const routes: Routes = [
@@ -555,7 +555,7 @@ export class LoginComponent {
 }
 ```
 
-### @org/ui-common
+### @mushaviri/ui-common
 
 **Purpose**: Shared UI components
 
@@ -571,7 +571,7 @@ export class LoginComponent {
 **Usage**:
 
 ```typescript
-import { NotificationService } from '@org/ui-common';
+import { NotificationService } from '@mushaviri/ui-common';
 
 export class MyComponent {
   private notificationService = inject(NotificationService);
@@ -582,7 +582,7 @@ export class MyComponent {
 }
 ```
 
-### @org/util-event-bus
+### @mushaviri/util-event-bus
 
 **Purpose**: Inter-application communication
 
@@ -595,7 +595,7 @@ export class MyComponent {
 **Usage**:
 
 ```typescript
-import { EventBusService, AppEvent } from '@org/util-event-bus';
+import { EventBusService, AppEvent } from '@mushaviri/util-event-bus';
 
 export class RemoteApp {
   private eventBus = inject(EventBusService);
@@ -616,7 +616,7 @@ export class RemoteApp {
 }
 ```
 
-### @org/util-theming
+### @mushaviri/util-theming
 
 **Purpose**: Application theming
 
@@ -629,7 +629,7 @@ export class RemoteApp {
 **Usage**:
 
 ```typescript
-import { ThemeService } from '@org/util-theming';
+import { ThemeService } from '@mushaviri/util-theming';
 
 export class App {
   private themeService = inject(ThemeService);

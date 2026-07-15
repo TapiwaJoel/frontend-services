@@ -1,24 +1,53 @@
-import { withNativeFederation, shareAll } from '@angular-architects/native-federation/config.js';
+import {
+  withNativeFederation,
+  shareAll,
+} from '@angular-architects/native-federation/config.js';
 
 export default withNativeFederation({
   name: 'shell',
 
-
   shared: {
     ...shareAll(
-      { singleton: true, strictVersion: true, requiredVersion: 'auto', build: 'package' },
+      {
+        singleton: true,
+        strictVersion: true,
+        requiredVersion: 'auto',
+        build: 'package',
+      },
       {
         overrides: {
           // includeSecondaries is an opt-out of ignoreUnusedDeps, so all of
           // @angular/core is shared to prevent mismatches.
-          '@angular/core': { singleton: true, strictVersion: true, requiredVersion: 'auto', build: 'package', includeSecondaries: { keepAll: true } },
+          '@angular/core': {
+            singleton: true,
+            strictVersion: true,
+            requiredVersion: 'auto',
+            build: 'package',
+            includeSecondaries: { keepAll: true },
+          },
         },
       },
     ),
-    '@org/data-access-auth': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-    '@org/ui-common': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-    '@org/util-event-bus': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-    '@org/util-theming': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@mushaviri/data-access-auth': {
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: 'auto',
+    },
+    '@mushaviri/ui-common': {
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: 'auto',
+    },
+    '@mushaviri/util-event-bus': {
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: 'auto',
+    },
+    '@mushaviri/util-theming': {
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: 'auto',
+    },
   },
 
   skip: [
@@ -61,6 +90,6 @@ export default withNativeFederation({
     // ignoreUnusedDeps: true,
 
     // Opt-in: groups chunks in remoteEntry.json for smaller metadata file
-    denseChunking: true
-  }
+    denseChunking: true,
+  },
 });

@@ -15,11 +15,15 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@org/models": ["packages/shared/models/src/index.ts"],
-      "@org/data-access-auth": ["./libs/shared/data-access-auth/src/index.ts"],
-      "@org/ui-common": ["./libs/shared/ui-common/src/index.ts"],
-      "@org/util-event-bus": ["./libs/shared/util-event-bus/src/index.ts"],
-      "@org/util-theming": ["./libs/shared/util-theming/src/index.ts"]
+      "@mushaviri/models": ["packages/shared/models/src/index.ts"],
+      "@mushaviri/data-access-auth": [
+        "./libs/shared/data-access-auth/src/index.ts"
+      ],
+      "@mushaviri/ui-common": ["./libs/shared/ui-common/src/index.ts"],
+      "@mushaviri/util-event-bus": [
+        "./libs/shared/util-event-bus/src/index.ts"
+      ],
+      "@mushaviri/util-theming": ["./libs/shared/util-theming/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

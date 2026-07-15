@@ -1098,10 +1098,10 @@ libs/
 │                   Shell Application                      │
 │  ┌───────────────────────────────────────────────────┐  │
 │  │  Depends on:                                      │  │
-│  │  • @org/data-access-auth                          │  │
-│  │  • @org/ui-common                                 │  │
-│  │  • @org/util-theming                              │  │
-│  │  • @org/util-event-bus                            │  │
+│  │  • @mushaviri/data-access-auth                          │  │
+│  │  • @mushaviri/ui-common                                 │  │
+│  │  • @mushaviri/util-theming                              │  │
+│  │  • @mushaviri/util-event-bus                            │  │
 │  └───────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────┘
                           │

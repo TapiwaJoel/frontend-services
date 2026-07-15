@@ -7,7 +7,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
-import { ThemeService, TitleService } from '@org/util-theming';
+import { ThemeService, TitleService } from '@mushaviri/util-theming';
 
 @Component({
   selector: 'org-root',

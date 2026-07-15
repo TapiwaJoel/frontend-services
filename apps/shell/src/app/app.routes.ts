@@ -4,7 +4,7 @@ import {
   noAuthGuard,
   optionalAuthGuard,
   requiredAuthGuard,
-} from '@org/data-access-auth';
+} from '@mushaviri/data-access-auth';
 import { loadRemoteModule } from '@angular-architects/native-federation';
 import { AppConfigService } from './services/app-config.service';
 

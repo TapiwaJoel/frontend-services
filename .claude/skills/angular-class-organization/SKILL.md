@@ -323,8 +323,8 @@ Here's a full component demonstrating proper class member organization:
 ```typescript
 import { ChangeDetectionStrategy, Component, computed, inject, Signal, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '@org/data-access-auth';
-import { ThemeService, Theme } from '@org/util-theming';
+import { AuthService } from '@mushaviri/data-access-auth';
+import { ThemeService, Theme } from '@mushaviri/util-theming';
 
 @Component({
   selector: 'org-login',

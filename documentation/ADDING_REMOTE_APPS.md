@@ -230,10 +230,10 @@ export default withNativeFederation({
         },
       },
     ),
-    '@org/shared/data-access-auth': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-    '@org/shared/ui-common': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-    '@org/shared/util-event-bus': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-    '@org/shared/util-theming': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@mushaviri/shared/data-access-auth': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@mushaviri/shared/ui-common': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@mushaviri/shared/util-event-bus': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@mushaviri/shared/util-theming': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
   },
 
   skip: ['rxjs/ajax', 'rxjs/fetch', 'rxjs/testing', 'rxjs/webSocket'],
@@ -377,7 +377,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { appRoutes } from './app.routes';
-import { authInterceptor } from '@org/data-access-auth';
+import { authInterceptor } from '@mushaviri/data-access-auth';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideBrowserGlobalErrorListeners(), provideRouter(appRoutes), provideHttpClient(withInterceptors([authInterceptor]))],
@@ -388,9 +388,9 @@ Use shared services in your component:
 
 ```typescript
 import { Component, inject, OnInit } from '@angular/core';
-import { AuthService } from '@org/data-access-auth';
-import { EventBusService } from '@org/util-event-bus';
-import { ThemeService } from '@org/util-theming';
+import { AuthService } from '@mushaviri/data-access-auth';
+import { EventBusService } from '@mushaviri/util-event-bus';
+import { ThemeService } from '@mushaviri/util-theming';
 
 @Component({
   // ...
@@ -489,7 +489,7 @@ Update the shell's route configuration to include the new remote:
 
 ```typescript
 import { Routes } from '@angular/router';
-import { authGuard } from '@org/data-access-auth';
+import { authGuard } from '@mushaviri/data-access-auth';
 import { loadRemoteModule } from '@angular-architects/native-federation';
 
 export const appRoutes: Routes = [
@@ -677,7 +677,7 @@ If your remote app needs to be imported elsewhere, add it to `tsconfig.base.json
 {
   "compilerOptions": {
     "paths": {
-      "@org/my-remote-app": ["apps/my-remote-app/src/index.ts"]
+      "@mushaviri/my-remote-app": ["apps/my-remote-app/src/index.ts"]
     }
   }
 }
@@ -897,9 +897,9 @@ import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
-import { AuthService } from '@org/data-access-auth';
-import { EventBusService } from '@org/util-event-bus';
-import { ThemeService } from '@org/util-theming';
+import { AuthService } from '@mushaviri/data-access-auth';
+import { EventBusService } from '@mushaviri/util-event-bus';
+import { ThemeService } from '@mushaviri/util-theming';
 
 @Component({
   imports: [CommonModule, RouterModule],

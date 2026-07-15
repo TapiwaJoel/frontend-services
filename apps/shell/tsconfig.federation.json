@@ -8,9 +8,7 @@
     "src/**/*.ts",
     "../../libs/shared/data-access-auth/src/index.ts",
     "../../libs/shared/ui-common/src/index.ts",
-    "../../libs/shared/util-theming/src/index.ts",
-    "../../packages/shared/models/src/index.ts",
-    "../../libs/shared/util-event-bus/src/index.ts"
+    "../../libs/shared/util-theming/src/index.ts"
   ],
   "exclude": [
     "src/**/*.spec.ts",
