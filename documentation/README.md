@@ -1,6 +1,6 @@
 # Documentation Index
 
-This directory contains detailed guides and documentation for the Frontend Services monorepo.
+This directory contains detailed guides and documentation for the Web Apps monorepo.
 
 ## Available Documentation
 

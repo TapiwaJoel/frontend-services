@@ -1,4 +1,4 @@
-# Frontend Services - Angular Micro-Frontend Monorepo
+# Web Apps - Angular Micro-Frontend Monorepo
 
 A production-ready Angular monorepo implementing a **single entry point micro-frontend architecture** using NX and Native Federation. This project demonstrates modern frontend architecture patterns with a centralized shell, pure remote modules, shared libraries, and seamless inter-application communication.
 
@@ -105,7 +105,7 @@ Key Points:
 ## Project Structure
 
 ```
-frontend-services/
+web-apps/
 ├── apps/
 │   ├── shell/                    # Host application (port 4200)
 │   │   ├── src/
@@ -312,7 +312,7 @@ Each domain contains three distinct application types:
 
 ```bash
 git clone <repository-url>
-cd frontend-services
+cd web-apps
 ```
 
 2. **Install dependencies**

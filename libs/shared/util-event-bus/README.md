@@ -12,25 +12,25 @@ A cross-app event bus service for Angular applications using RxJS. This library 
 
 ## Installation
 
-This library is part of the monorepo and can be imported from `@frontend-services/util-event-bus`.
+This library is part of the monorepo and can be imported from `@mushaviri/util-event-bus`.
 
 ## Usage
 
 ### Importing
 
 ```typescript
-import { EventBusService, AppEvent, EventTypes } from '@frontend-services/util-event-bus';
+import { EventBusService, AppEvent, EventTypes } from '@mushaviri/util-event-bus';
 ```
 
 ### Emitting Events
 
 ```typescript
 import { Component } from '@angular/core';
-import { EventBusService, EventTypes } from '@frontend-services/util-event-bus';
+import { EventBusService, EventTypes } from '@mushaviri/util-event-bus';
 
 @Component({
   selector: 'app-login',
-  template: '...'
+  template: '...',
 })
 export class LoginComponent {
   constructor(private eventBus: EventBusService) {}
@@ -39,7 +39,7 @@ export class LoginComponent {
     this.eventBus.emit({
       type: EventTypes.USER_LOGGED_IN,
       payload: { userId: user.id, username: user.name },
-      source: 'LoginComponent'
+      source: 'LoginComponent',
     });
   }
 }
@@ -51,12 +51,12 @@ export class LoginComponent {
 
 ```typescript
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { EventBusService } from '@frontend-services/util-event-bus';
+import { EventBusService } from '@mushaviri/util-event-bus';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-event-logger',
-  template: '...'
+  template: '...',
 })
 export class EventLoggerComponent implements OnInit, OnDestroy {
   private subscription?: Subscription;
@@ -64,7 +64,7 @@ export class EventLoggerComponent implements OnInit, OnDestroy {
   constructor(private eventBus: EventBusService) {}
 
   ngOnInit() {
-    this.subscription = this.eventBus.events$.subscribe(event => {
+    this.subscription = this.eventBus.events$.subscribe((event) => {
       console.log('Event received:', event);
     });
   }
@@ -79,12 +79,12 @@ export class EventLoggerComponent implements OnInit, OnDestroy {
 
 ```typescript
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { EventBusService, EventTypes } from '@frontend-services/util-event-bus';
+import { EventBusService, EventTypes } from '@mushaviri/util-event-bus';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-notification-handler',
-  template: '...'
+  template: '...',
 })
 export class NotificationHandlerComponent implements OnInit, OnDestroy {
   private subscription?: Subscription;
@@ -92,12 +92,10 @@ export class NotificationHandlerComponent implements OnInit, OnDestroy {
   constructor(private eventBus: EventBusService) {}
 
   ngOnInit() {
-    this.subscription = this.eventBus
-      .on(EventTypes.NOTIFICATION_SHOW)
-      .subscribe(event => {
-        // Handle notification
-        this.showNotification(event.payload);
-      });
+    this.subscription = this.eventBus.on(EventTypes.NOTIFICATION_SHOW).subscribe((event) => {
+      // Handle notification
+      this.showNotification(event.payload);
+    });
   }
 
   showNotification(payload: any) {
@@ -116,10 +114,10 @@ export class NotificationHandlerComponent implements OnInit, OnDestroy {
 
 ```typescript
 export interface AppEvent {
-  type: string;           // Event type identifier
-  payload: any;           // Event data
-  source?: string;        // Optional source identifier
-  timestamp?: number;     // Unix timestamp (auto-generated if not provided)
+  type: string; // Event type identifier
+  payload: any; // Event data
+  source?: string; // Optional source identifier
+  timestamp?: number; // Unix timestamp (auto-generated if not provided)
 }
 ```
 
@@ -187,7 +185,7 @@ export class ThemeService {
     this.eventBus.emit({
       type: EventTypes.THEME_CHANGED,
       payload: { theme },
-      source: 'ThemeService'
+      source: 'ThemeService',
     });
   }
 }
@@ -199,11 +197,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private eventBus: EventBusService) {}
 
   ngOnInit() {
-    this.subscription = this.eventBus
-      .on(EventTypes.THEME_CHANGED)
-      .subscribe(event => {
-        this.updateHeaderTheme(event.payload.theme);
-      });
+    this.subscription = this.eventBus.on(EventTypes.THEME_CHANGED).subscribe((event) => {
+      this.updateHeaderTheme(event.payload.theme);
+    });
   }
 
   ngOnDestroy() {
@@ -218,7 +214,7 @@ The service includes comprehensive unit tests. You can use the service in tests 
 
 ```typescript
 import { TestBed } from '@angular/core/testing';
-import { EventBusService } from '@frontend-services/util-event-bus';
+import { EventBusService } from '@mushaviri/util-event-bus';
 
 describe('MyComponent', () => {
   let eventBus: EventBusService;
@@ -231,7 +227,7 @@ describe('MyComponent', () => {
   });
 
   it('should emit event', (done) => {
-    eventBus.events$.subscribe(event => {
+    eventBus.events$.subscribe((event) => {
       expect(event.type).toBe('TEST_EVENT');
       done();
     });
@@ -256,4 +252,4 @@ Run `nx test util-event-bus` to execute the unit tests.
 
 ## License
 
-This library is part of the frontend-services monorepo.
+This library is part of the web-apps monorepo.

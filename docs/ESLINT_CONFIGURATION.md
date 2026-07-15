@@ -1,6 +1,6 @@
 # ESLint Configuration
 
-This document describes the ESLint configuration for the frontend-services workspace, including custom rules and best practices adopted from the backend-services project.
+This document describes the ESLint configuration for the web-apps workspace, including custom rules and best practices adopted from the backend-services project.
 
 ## Table of Contents
 
@@ -14,7 +14,7 @@ This document describes the ESLint configuration for the frontend-services works
 
 ## Overview
 
-The frontend-services workspace uses ESLint 9 with the flat config format (`.mjs` files) and includes:
+The web-apps workspace uses ESLint 9 with the flat config format (`.mjs` files) and includes:
 
 - Nx monorepo-specific rules
 - Angular-specific linting (components, templates, directives)

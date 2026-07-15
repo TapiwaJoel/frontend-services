@@ -1,5 +1,5 @@
 /**
- * Custom ESLint Rules for Frontend Services
+ * Custom ESLint Rules for Web Apps
  *
  * This module exports custom ESLint rules specific to our Angular workspace.
  * Rules are registered under the 'org' namespace.
