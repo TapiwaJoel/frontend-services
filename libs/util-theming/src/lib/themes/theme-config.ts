@@ -3,11 +3,22 @@ import { Theme } from '../models/theme.model';
 export const THEMES: Record<string, Theme> = {
   default: {
     name: 'default',
-    primaryColor: '#1976d2',
-    accentColor: '#ff4081',
+    primaryColor: '#455a64', // Blue-gray from science illustration
+    accentColor: '#FFC727', // Golden yellow from science illustration
     backgroundColor: '#ffffff',
-    loginIllustration: '/assets/illustrations/default-login.svg',
+    loginIllustration: '/assets/illustrations/default-illustration.svg',
     logo: '/assets/logos/default-logo.svg',
+    displayName: 'Admin',
+    appVariant: 'admin',
+    titleSuffix: 'Portal',
+  },
+  admin: {
+    name: 'admin',
+    primaryColor: '#455a64', // Blue-gray from science illustration
+    accentColor: '#FFC727', // Golden yellow matching hand in logo
+    backgroundColor: '#ffffff',
+    loginIllustration: '/assets/illustrations/default-illustration.svg',
+    logo: '/assets/logos/interactive_v1_hand_yellow.svg',
     displayName: 'Admin',
     appVariant: 'admin',
     titleSuffix: 'Portal',
@@ -23,7 +34,7 @@ export const THEMES: Record<string, Theme> = {
     borderColor: '#d7d6e0', // Lightest purple-gray for borders
     hoverColor: '#3a3166', // Darker purple for hover states
     isDark: false,
-    loginIllustration: '/assets/illustrations/teaching-cuate.svg',
+    loginIllustration: '/assets/illustrations/umdzidzisi-illustration.svg',
     logo: '/assets/logos/umdzidzisi-logo.svg',
     displayName: 'Umdzidzisi',
     appVariant: 'admin',
@@ -40,7 +51,7 @@ export const THEMES: Record<string, Theme> = {
     borderColor: '#282148', // Very dark purple for borders
     hoverColor: '#9891b4', // Medium purple for hover states
     isDark: true,
-    loginIllustration: '/assets/illustrations/teaching-cuate.svg',
+    loginIllustration: '/assets/illustrations/umdzidzisi-illustration.svg',
     logo: '/assets/logos/umdzidzisi-logo.svg',
     displayName: 'Umdzidzisi',
     appVariant: 'admin',
@@ -48,10 +59,10 @@ export const THEMES: Record<string, Theme> = {
   },
   umtengesi: {
     name: 'umtengesi',
-    primaryColor: '#4caf50',
-    accentColor: '#ff9800',
-    backgroundColor: '#f5f5f5',
-    loginIllustration: '/assets/illustrations/umtengesi-admin-login.svg',
+    primaryColor: '#FF725E', // Coral/salmon from illustration
+    accentColor: '#d78776', // Rose/peachy accent
+    backgroundColor: '#fafafa',
+    loginIllustration: '/assets/illustrations/umtengesi-illustration.svg',
     logo: '/assets/logos/umtengesi-logo.svg',
     displayName: 'Umtengesi',
     appVariant: 'admin',

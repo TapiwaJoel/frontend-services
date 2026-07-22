@@ -20,10 +20,10 @@ module.exports = {
         },
         // Default theme colors
         default: {
-          primary: '#1976d2',
-          accent: '#ff4081',
+          primary: '#455a64',
+          accent: '#FFC727',
           background: '#ffffff',
-          text: '#212121',
+          text: '#263238',
           'text-secondary': '#757575',
           border: '#e0e0e0',
         },
@@ -52,9 +52,9 @@ module.exports = {
         },
         // Umtengesi brand colors
         umtengesi: {
-          primary: '#4caf50',
-          accent: '#ff9800',
-          background: '#f5f5f5',
+          primary: '#FF725E',
+          accent: '#d78776',
+          background: '#fafafa',
           text: '#212121',
           'text-secondary': '#757575',
           border: '#e0e0e0',

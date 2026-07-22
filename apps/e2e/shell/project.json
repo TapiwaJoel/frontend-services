@@ -1,9 +1,0 @@
-{
-  "name": "e2e-shell",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "projectType": "application",
-  "sourceRoot": "apps/e2e/shell/src",
-  "implicitDependencies": ["shell"],
-  "// targets": "to see all targets run: nx show project e2e-shell --web",
-  "targets": {}
-}

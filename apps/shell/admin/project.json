@@ -1,0 +1,149 @@
+{
+  "name": "shell-admin",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "org",
+  "sourceRoot": "apps/shell/admin/src",
+  "tags": ["scope:shell", "type:app"],
+  "targets": {
+    "build": {
+      "executor": "@angular-architects/native-federation:build",
+      "defaultConfiguration": "production",
+      "options": {
+        "cacheExternalArtifacts": true
+      },
+      "configurations": {
+        "production": {
+          "target": "shell-admin:esbuild:production"
+        },
+        "development": {
+          "target": "shell-admin:esbuild:development",
+          "dev": true
+        }
+      }
+    },
+    "serve": {
+      "executor": "@angular-architects/native-federation:build",
+      "options": {
+        "target": "shell-admin:serve-original:development",
+        "rebuildDelay": 500,
+        "cacheExternalArtifacts": true,
+        "dev": true,
+        "devServer": true,
+        "port": 4200
+      },
+      "configurations": {
+        "umdzidzisi": {
+          "target": "shell-admin:serve-original:umdzidzisi"
+        },
+        "umtengesi": {
+          "target": "shell-admin:serve-original:umtengesi"
+        }
+      }
+    },
+    "esbuild": {
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/shell/admin",
+        "browser": "apps/shell/admin/src/main.ts",
+        "tsConfig": "apps/shell/admin/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/shell/admin/public"
+          }
+        ],
+        "styles": ["apps/shell/admin/src/styles.scss"],
+        "polyfills": ["es-module-shims"]
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        },
+        "umdzidzisi": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/shell/admin/src/environments/environment.ts",
+              "with": "apps/shell/admin/src/environments/environment.umdzidzisi.ts"
+            }
+          ]
+        },
+        "umtengesi": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/shell/admin/src/environments/environment.ts",
+              "with": "apps/shell/admin/src/environments/environment.umtengesi.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve-original": {
+      "continuous": true,
+      "executor": "@angular/build:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4200
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "shell-admin:esbuild:production"
+        },
+        "development": {
+          "buildTarget": "shell-admin:esbuild:development"
+        },
+        "umdzidzisi": {
+          "buildTarget": "shell-admin:esbuild:umdzidzisi"
+        },
+        "umtengesi": {
+          "buildTarget": "shell-admin:esbuild:umtengesi"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "watch": false
+      }
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "shell-admin:build",
+        "port": 4200,
+        "staticFilePath": "dist/apps/shell/admin/browser",
+        "spa": true
+      }
+    }
+  }
+}
